@@ -56,3 +56,4 @@ stages:
           ./build-packages.sh
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variabl
+        TEST_PAT_ENV_VAR: $(TEST_PAT) 

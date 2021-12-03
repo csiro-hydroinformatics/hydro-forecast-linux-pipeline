@@ -4,6 +4,9 @@
 # This script is responsible for creating the single exe (bundle python app) to be used by the election production build process
 
 SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
+TEST_PAT=${TEST_PAT_ENV_VAR}
+
+echo TEST_PAT=${TEST_PAT_ENV_VAR}
 
 # export SRC_PATH=$(pwd)/water-apportionment-pk/pkgs
 export IMAGE_NAME=swift_builder
@@ -16,7 +19,7 @@ echo CURRENT_UID=${CURRENT_UID}
 # echo SRC_PATH=${SRC_PATH}
 
 docker build --no-cache --force-rm --build-arg CURRENT_UID_ARG=${CURRENT_UID} -t ${IMAGE_NAME} .
-docker run --rm --name ${IMAGE_NAME} -v "${ARTIFACT_PATH}:/pkgs" ${IMAGE_NAME} ${SWIFT_PAT} 
+docker run --rm --name ${IMAGE_NAME} -v "${ARTIFACT_PATH}:/pkgs" ${IMAGE_NAME} ${SWIFT_PAT} ${TEST_PAT} 
 
 ls ${ARTIFACT_PATH}
 

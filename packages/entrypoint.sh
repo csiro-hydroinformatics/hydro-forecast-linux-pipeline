@@ -1,5 +1,10 @@
 #!/bin/bash
 SWIFT_PAT=$1
+TEST_PAT=$2
+
+echo from entrypoint.sh
+echo TEST_PAT=$TEST_PAT
+echo TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
 
 set -e  # Exit immediately if a command exits with a non-zero status.
 
