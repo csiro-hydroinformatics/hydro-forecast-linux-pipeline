@@ -1,0 +1,59 @@
+# Builds hydrologic forecast packages or installer (Debian, Python)
+#
+# Triggered when a change is pushed to the dev-deploy branch on the 
+# github repository https://github.com/waa-tool/electron-waa 
+# This replaces the build previously handled by an on-premise Jenkins server, lw-74-cdc
+#
+# This pipeline largely reuses the preexisting infrastructure to build servers and front end.
+# The final packaging and versioning is however significantly new
+#
+# See ./doc/azure_pipelines.md
+
+trigger:
+- deb_build
+
+resources:
+  repositories:
+  # - repository: MyGitHubRepo # The name used to reference this repository in the checkout step
+  #   type: github
+  #   endpoint: MyGitHubServiceConnection
+  #   name: MyGitHubOrgOrUser/MyGitHubRepo
+  # - repository: MyBitbucketRepo
+  #   type: bitbucket
+  #   endpoint: MyBitbucketServiceConnection
+  #   name: MyBitbucketOrgOrUser/MyBitbucketRepo
+  - repository: NumericalSlCpp # In a different organization
+    endpoint: NumericalSlCppGitServiceConnection
+    type: git
+    name: CsiroBitbucket/NumericalSlCppRepo
+
+# resources:
+# - repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+# to get a custom '$(Build.BuildNumber)', and 'r' is a counter reset to 1 every change of the major/minor versions
+# TODO: reference to this technique on the web?
+name: '0.1.$(Rev:r)'
+
+# TODO: test stage, or step if it is worth reusing the ubuntu vm (likely)
+stages:
+- stage: Build
+  displayName: Build packages
+  jobs:
+  - job: Build
+    displayName: Build packages
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+    - checkout: MyAzureReposGitRepository
+    - task: Bash@3
+      displayName: 'Build debian and python packages'
+      inputs:
+        targetType: 'inline'
+        script: |
+          mkdir -p $(Build.SourcesDirectory)/packages
+          cd $(Build.SourcesDirectory)/packages
+          # ./build-packages.sh
