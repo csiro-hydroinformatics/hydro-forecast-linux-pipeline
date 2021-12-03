@@ -52,8 +52,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          mkdir -p $(Build.SourcesDirectory)/packages
           cd $(Build.SourcesDirectory)/packages
-          # ./build-packages.sh
+          ./build-packages.sh
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variabl
