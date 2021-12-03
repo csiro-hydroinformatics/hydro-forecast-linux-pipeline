@@ -14,14 +14,6 @@ trigger:
 
 resources:
   repositories:
-  # - repository: MyGitHubRepo # The name used to reference this repository in the checkout step
-  #   type: github
-  #   endpoint: MyGitHubServiceConnection
-  #   name: MyGitHubOrgOrUser/MyGitHubRepo
-  # - repository: MyBitbucketRepo
-  #   type: bitbucket
-  #   endpoint: MyBitbucketServiceConnection
-  #   name: MyBitbucketOrgOrUser/MyBitbucketRepo
   - repository: NumericalSlCpp # In a different organization
     endpoint: NumericalSlCppGitServiceConnection
     type: git
@@ -49,6 +41,13 @@ stages:
     steps:
     - checkout: self
     - checkout: MyAzureReposGitRepository
+    - task: Bash@3
+      displayName: 'Where are repos checked out'
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo Build.SourcesDirectory=$(Build.SourcesDirectory)
+          ls $(Build.SourcesDirectory)
     - task: Bash@3
       displayName: 'Build debian and python packages'
       inputs:
