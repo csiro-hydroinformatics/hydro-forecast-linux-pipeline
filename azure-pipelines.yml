@@ -12,15 +12,15 @@
 trigger:
 - deb_build
 
-resources:
-  repositories:
-  - repository: NumericalSlCpp # In a different organization
-    endpoint: NumericalSlCppGitServiceConnection
-    type: git
-    name: CsiroBitbucket/NumericalSlCppRepo
-
 # resources:
-# - repo: self
+#   repositories:
+#   - repository: NumericalSlCpp # In a different organization
+#     endpoint: NumericalSlCppGitServiceConnection
+#     type: git
+#     name: CsiroBitbucket/NumericalSlCppRepo
+
+resources:
+- repo: self
 
 variables:
   tag: '$(Build.BuildId)'
@@ -40,7 +40,6 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - checkout: self
-    - checkout: MyAzureReposGitRepository
     - task: Bash@3
       displayName: 'Where are repos checked out'
       inputs:
@@ -56,3 +55,5 @@ stages:
           mkdir -p $(Build.SourcesDirectory)/packages
           cd $(Build.SourcesDirectory)/packages
           # ./build-packages.sh
+      env:
+        SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variabl
