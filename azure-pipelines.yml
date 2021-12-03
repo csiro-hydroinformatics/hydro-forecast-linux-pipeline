@@ -53,6 +53,7 @@ stages:
         targetType: 'inline'
         script: |
           cd $(Build.SourcesDirectory)/packages
+          echo yml pipeline: TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
           ./build-packages.sh
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variabl

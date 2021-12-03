@@ -22,8 +22,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # ENV MAKE_CMD="make -j 6"
 
 RUN apt-get update && apt-get install -y \
-  ssh-client \
   git 
+#   ssh-client \
 #   cmake \
 #   catch \
 #   g++ \
