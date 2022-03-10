@@ -61,4 +61,4 @@ RUN apt-get update && apt-get install -y \
 #   dh-cmake 
 
 
-ENTRYPOINT ["./entrypoint.sh", "SWIFT_PAT", "TEST_PAT"]
+ENTRYPOINT ["./entrypoint.sh"]
