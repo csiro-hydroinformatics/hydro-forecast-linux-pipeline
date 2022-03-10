@@ -1,20 +1,22 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Build pipelines for hydrologic simulation and forecasting tools
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+## Overview
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+This repository contains material to streamline the build, testing and possible deployment of hydrologic simulation and forecasting tools.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+These tools have been re-used in projects undertaken for DWL.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+
+As of 2022-03 this contains two pipelines: 
+
+* The default one is preliminary, building a docker image for simulation and forecasting with SWIFT2 via a Jupyter front end
+* Under /packages is a pipeline building debian packages of SWIFT2
+
+## Related work
+
+ssh://git@bitbucket.csiro.au:7999/sf/easi-hydro-forecast.git
+
+## Contact
+
+jean-michel.perraud@csiro.au
+david.robertson@csiro.au

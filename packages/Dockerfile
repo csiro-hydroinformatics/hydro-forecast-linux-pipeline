@@ -9,6 +9,7 @@ WORKDIR /internal
 # COPY ./water-apportionment-pk/pkgs /src #link the volume instead
 # COPY ./water-apportionment-pk/deploy/requirements.txt /internal
 COPY ./entrypoint.sh /internal
+COPY ./build_debian_pkgs.sh /internal
 
 USER root
 

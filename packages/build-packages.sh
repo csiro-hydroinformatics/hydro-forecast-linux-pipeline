@@ -1,14 +1,11 @@
 #!/bin/bash
 # set -e
 
-# This script is responsible for creating the single exe (bundle python app) to be used by the election production build process
-
 SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 TEST_PAT=${TEST_PAT_ENV_VAR}
 
-echo TEST_PAT=${TEST_PAT_ENV_VAR}
+echo from within build-packges.sh: TEST_PAT=${TEST_PAT_ENV_VAR}
 
-# export SRC_PATH=$(pwd)/water-apportionment-pk/pkgs
 export IMAGE_NAME=swift_builder
 export CURRENT_UID=$(id -u):$(id -g)
 
