@@ -54,9 +54,11 @@ stages:
         script: |
           cd $(Build.SourcesDirectory)/packages
           echo yaml pipeline: TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
+          echo yaml pipeline: LOCAL_TEST_PAT_ENV_VAR=$LOCAL_TEST_PAT_ENV_VAR
           # spits out yml pipeline: TEST_PAT_ENV_VAR=$(TEST_PAT)
           ./build-packages.sh
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
         # But this is not working for me. WTH?
         TEST_PAT_ENV_VAR: $(TEST_PAT) 
+        LOCAL_TEST_PAT_ENV_VAR: blah 

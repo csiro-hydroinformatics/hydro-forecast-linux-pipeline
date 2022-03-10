@@ -4,7 +4,7 @@
 SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 TEST_PAT=${TEST_PAT_ENV_VAR}
 
-echo from within build-packges.sh: TEST_PAT=${TEST_PAT_ENV_VAR}
+echo from within build-packges.sh: TEST_PAT=${TEST_PAT} LOCAL_TEST_PAT_ENV_VAR=${LOCAL_TEST_PAT_ENV_VAR}
 
 export IMAGE_NAME=swift_builder
 export CURRENT_UID=$(id -u):$(id -g)
