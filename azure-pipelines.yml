@@ -118,7 +118,7 @@ stages:
       inputs:
         command: publish
         publishDirectory: '$(Build.ArtifactStagingDirectory)/release'
-        vstsFeedPublish: 'WAA Tool/win_installer'
+        vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
         vstsFeedPackagePublish: 'swift_deb'
         versionOption: custom
         versionPublish: '$(Build.BuildNumber)'
@@ -129,7 +129,7 @@ stages:
       inputs:
         command: publish
         publishDirectory: '$(Build.ArtifactStagingDirectory)/version'
-        vstsFeedPublish: 'WAA Tool/win_installer'
+        vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
         vstsFeedPackagePublish: 'swift_deb_version'
         versionOption: custom
         versionPublish: '$(Build.BuildNumber)'
