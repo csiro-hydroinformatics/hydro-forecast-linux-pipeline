@@ -24,7 +24,7 @@ mkdir -p ${CSIRO_BITBUCKET} \
   && cd .. \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/swift.git \
   && cd swift \
-  && git checkout research \
+  && git checkout experimental \
   && cd ..
 
 # Clone github repos
