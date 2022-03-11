@@ -64,15 +64,19 @@ mkdir -p ${GITHUB_REPOS} \
 mkdir -p /scripts
 
 DEB_PKGS_DIR=/tmp/debpkgs
+mkdir -p ${DEB_PKGS_DIR}
+
 DEBUG_DEB=0
 
 
 DEST_ROOT=/tmp/debbuild
 
-chmod +x ./build_debian_pkgs.sh \
+cd /internal \
+  && chmod +x ./build_debian_pkgs.sh \
   && ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEST_ROOT}
 
 # Change the ownership of the newly produced files
-cd /pkgs
+cp ${DEB_PKGS_DIR}/* /pkgs/
+cd /pkgs/
 touch test.txt
 chown -R ${CURRENT_UID} *

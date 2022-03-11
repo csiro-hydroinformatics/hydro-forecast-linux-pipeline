@@ -4,6 +4,8 @@
 SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 TEST_PAT=${TEST_PAT_ENV_VAR}
 
+OUT_ARTIFACT_PATH=$1  # $(Build.SourcesDirectory)/artifacts
+
 echo from within build-packages.sh: TEST_PAT=${TEST_PAT} LOCAL_TEST_PAT_ENV_VAR=${LOCAL_TEST_PAT_ENV_VAR}
 
 export IMAGE_NAME=swift_builder
@@ -17,8 +19,9 @@ echo CURRENT_UID=${CURRENT_UID}
 
 # docker build --no-cache --force-rm --build-arg CURRENT_UID_ARG=${CURRENT_UID} -t ${IMAGE_NAME} .
 docker build --build-arg CURRENT_UID_ARG=${CURRENT_UID} -t ${IMAGE_NAME} .
-docker run --rm --name ${IMAGE_NAME} -v "${ARTIFACT_PATH}:/pkgs" ${IMAGE_NAME} ${SWIFT_PAT} ${TEST_PAT} 
+docker run --rm --name ${IMAGE_NAME} -v "${ARTIFACT_PATH}:${OUT_ARTIFACT_PATH}" ${IMAGE_NAME} ${SWIFT_PAT} ${TEST_PAT} 
 
+echo ARTIFACT_PATH=${ARTIFACT_PATH} contains:
 ls ${ARTIFACT_PATH}
 
 ## Obsolete?

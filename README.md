@@ -15,6 +15,10 @@ Other pipelines on the roadmap or wishlist:
 
 * building a docker image for simulation and forecasting with SWIFT2 via a Jupyter front end. This relates notably to runing on EASI with a custom image, because for instance some of the packages (ipywidgets, bqplot) are not and should not be in the default easi image (bloat).
 
+## TODO
+
+* Define a set of docker images with/for swift, starting with an image with debian packages ready to build from source
+  * Where to store? csiro docker registry but not sure if/how to access from cloud pipeline.
 ## Related work
 
 ssh://git@bitbucket.csiro.au:7999/sf/easi-hydro-forecast.git

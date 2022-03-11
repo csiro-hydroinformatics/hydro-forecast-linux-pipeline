@@ -48,7 +48,7 @@ stages:
           echo Build.SourcesDirectory=$(Build.SourcesDirectory)
           ls $(Build.SourcesDirectory)
     - task: Bash@3
-      displayName: 'Build debian and python packages'
+      displayName: 'Build debian packages'
       inputs:
         targetType: 'inline'
         script: |
@@ -56,9 +56,83 @@ stages:
           echo yaml pipeline: TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
           echo yaml pipeline: LOCAL_TEST_PAT_ENV_VAR=$LOCAL_TEST_PAT_ENV_VAR
           # spits out yml pipeline: TEST_PAT_ENV_VAR=$(TEST_PAT)
-          ./build-packages.sh
+          mkdir -p $(Build.SourcesDirectory)/artifacts
+          ./build-packages.sh $(Build.SourcesDirectory)/artifacts
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
         # But this is not working for me. WTH?
         TEST_PAT_ENV_VAR: $(TEST_PAT) 
         LOCAL_TEST_PAT_ENV_VAR: blah 
+    # I could not locate an existing, or at least easy to use, point 
+    # where we can check the "latest version" from the feed we populate with artifacts.
+    # Let's create something small (not 100MB like the full installer) to be more nimble when
+    # "just" checking for new versions 
+    - task: Bash@3
+      displayName: 'Create small artifact with version'
+      inputs:
+        targetType: 'inline'
+        script: |
+          mkdir -p $(Build.SourcesDirectory)/version
+          echo $(Build.BuildNumber) > $(Build.SourcesDirectory)/version/version.txt
+    #- task: Bash@3
+    #  displayName: 'Debug task only, check locations'
+    #  inputs:
+    #    targetType: 'inline'
+    #    script: |
+    #      # Figure out layout of the VM. 
+    #      echo pwd:
+    #      pwd
+    #      echo
+    #      ls
+    #      echo $(Pipeline.Workspace)
+    #      ls $(Pipeline.Workspace)
+    # Note that VSCode may show an intellisense errors for some tasks:
+    #    String does not match the pattern of "^PowerShell@2$"
+    # This seems to be a bug in VSCode or a plugin. Ignore.
+    - task: CopyFiles@2
+      displayName: 'Copy build output to the artifact staging directory'
+      inputs:
+        sourceFolder: '$(Build.SourcesDirectory)/artifacts'
+        contents: '*.*'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/release'
+
+    - task: CopyFiles@2
+      displayName: Copy files for installer version
+      inputs:
+        sourceFolder: '$(Build.SourcesDirectory)/version'
+        contents: '*.*'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/version'
+
+    # Note that the MS azure doc seems to advocate using the PublishPipelineArtifact task.
+    # However this was too abstract to me, without a useful examplar to start from
+    # Instead, using UniversalPackages which worked out OK
+
+    #- task: PublishPipelineArtifact@1
+    #  inputs:
+    #    targetPath: '$(Pipeline.Workspace)'
+    #    artifact: 'WaaInstaller'
+    #    publishLocation: 'pipeline'
+
+    - task: UniversalPackages@0
+      displayName: Build installer as U.P.
+      inputs:
+        command: publish
+        publishDirectory: '$(Build.ArtifactStagingDirectory)/release'
+        vstsFeedPublish: 'WAA Tool/win_installer'
+        vstsFeedPackagePublish: 'swift_deb'
+        versionOption: custom
+        versionPublish: '$(Build.BuildNumber)'
+        packagePublishDescription: 'Debian packages for swift and co.'
+
+    - task: UniversalPackages@0
+      displayName: Build version check as U.P.
+      inputs:
+        command: publish
+        publishDirectory: '$(Build.ArtifactStagingDirectory)/version'
+        vstsFeedPublish: 'WAA Tool/win_installer'
+        vstsFeedPackagePublish: 'swift_deb_version'
+        versionOption: custom
+        versionPublish: '$(Build.BuildNumber)'
+        packagePublishDescription: 'Version number for Debian packages for swift and co. bundle'
+
+
