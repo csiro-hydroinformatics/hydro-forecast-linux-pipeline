@@ -60,20 +60,26 @@ mkdir -p ${GITHUB_REPOS} \
   && git checkout master \
   && cd ..
 
-
-mkdir -p /scripts
+cd ${GITHUB_REPOS}/config-utils \
+  && make install
 
 DEB_PKGS_DIR=/tmp/debpkgs
 mkdir -p ${DEB_PKGS_DIR}
 
-DEBUG_DEB=0
-
+export DEBUG_DEB=0
 
 DEST_ROOT=/tmp/debbuild
 
 cd /internal \
   && chmod +x ./build_debian_pkgs.sh \
   && ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEST_ROOT}
+
+if [ $? == 0 ]; then
+    echo "OK: build_debian_pkgs.sh completed with no error";
+else
+    echo "FAILED: build_debian_pkgs.sh";
+    return 1;
+fi
 
 # Change the ownership of the newly produced files
 cp ${DEB_PKGS_DIR}/* /pkgs/
