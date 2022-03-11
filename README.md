@@ -6,11 +6,14 @@ This repository contains material to streamline the build, testing and possible 
 
 These tools have been re-used in projects undertaken for DWL.
 
+As of 2022-03 this contains one pipeline:
 
-As of 2022-03 this contains two pipelines: 
+* Under /packages is a pipeline building debian packages of SWIFT2 and its dependencies.
+  * The pipeline uses secret pipeline variable to pass a personal access token to check out git repositories over ssh. This is a better alternative than copying ssh keys into docker containters and trying to conceal them.
 
-* The default one is preliminary, building a docker image for simulation and forecasting with SWIFT2 via a Jupyter front end
-* Under /packages is a pipeline building debian packages of SWIFT2
+Other pipelines on the roadmap or wishlist:
+
+* building a docker image for simulation and forecasting with SWIFT2 via a Jupyter front end. This relates notably to runing on EASI with a custom image, because for instance some of the packages (ipywidgets, bqplot) are not and should not be in the default easi image (bloat).
 
 ## Related work
 

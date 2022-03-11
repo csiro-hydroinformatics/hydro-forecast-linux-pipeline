@@ -66,12 +66,11 @@ mkdir -p /scripts
 DEB_PKGS_DIR=/tmp/debpkgs
 DEBUG_DEB=0
 
-# COPY ./build_debian_pkgs.sh /scripts/build_debian_pkgs.sh
 
 DEST_ROOT=/tmp/debbuild
 
-chmod +x /scripts/build_debian_pkgs.sh \
-  && /scripts/build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEST_ROOT}
+chmod +x ./build_debian_pkgs.sh \
+  && ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEST_ROOT}
 
 # Change the ownership of the newly produced files
 cd /pkgs

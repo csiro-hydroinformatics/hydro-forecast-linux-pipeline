@@ -188,9 +188,9 @@ else
     cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
-dpkg -c ${DEB_PKGS_DIR}/libswift_2.3-2_amd64.deb 
-dpkg -c ${DEB_PKGS_DIR}/libswift-dev_2.3-2_amd64.deb 
+dpkg -c ${DEB_PKGS_DIR}/libswift_2.3-7_amd64.deb 
+dpkg -c ${DEB_PKGS_DIR}/libswift-dev_2.3-7_amd64.deb 
 
-${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift_2.3-2_amd64.deb 
-${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift-dev_2.3-2_amd64.deb 
+${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift_2.3-7_amd64.deb 
+${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift-dev_2.3-7_amd64.deb 
 
