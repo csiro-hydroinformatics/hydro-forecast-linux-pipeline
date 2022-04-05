@@ -39,6 +39,10 @@ mkdir -p ${GITHUB_REPOS} \
   && cd rcpp-interop-commons \
   && git checkout testing \
   && cd .. \
+  && git clone https://github.com/csiro-hydroinformatics/pyrefcount.git \
+  && cd rcpp-interop-commons \
+  && git checkout testing \
+  && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/threadpool.git \
   && cd threadpool \
   && git checkout master \
@@ -81,8 +85,19 @@ else
     return 1;
 fi
 
+cd /internal \
+  && chmod +x ./build_python_pkgs.sh \
+  && ./build_python_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT}
+
+if [ $? == 0 ]; then
+    echo "OK: build_python_pkgs.sh completed with no error";
+else
+    echo "FAILED: build_python_pkgs.sh";
+    return 1;
+fi
+
 # Change the ownership of the newly produced files
 cp ${DEB_PKGS_DIR}/* /pkgs/
 cd /pkgs/
-touch test.txt
+# touch test.txt
 chown -R ${CURRENT_UID} *
