@@ -82,7 +82,7 @@ if [ $? == 0 ]; then
     echo "OK: build_debian_pkgs.sh completed with no error";
 else
     echo "FAILED: build_debian_pkgs.sh";
-    return 1;
+    exit 1;
 fi
 
 cd /internal \
@@ -93,7 +93,7 @@ if [ $? == 0 ]; then
     echo "OK: build_python_pkgs.sh completed with no error";
 else
     echo "FAILED: build_python_pkgs.sh";
-    return 1;
+    exit 1;
 fi
 
 # Change the ownership of the newly produced files

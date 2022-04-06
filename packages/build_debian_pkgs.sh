@@ -24,7 +24,7 @@ _clean_debbuild() {
 _build_tarball () {
     if [ ! -e ${SRC} ]; then
         echo "FAILED: direcory not found: $SRC";
-        return 1;
+        exit 1;
     fi
     src_pkgname_ver=${src_pkgname}-${vernum}
     src_pkgname_orig_directory=${src_pkgname_ver}
@@ -59,7 +59,7 @@ _build_tarball () {
         else
             echo "DEBUG active: leaving directory $DEST_PKG";
         fi
-        return 1;
+        exit 1;
     fi
 }
 

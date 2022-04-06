@@ -16,6 +16,7 @@ WORKDIR /internal
 
 COPY ./entrypoint.sh /internal
 COPY ./build_debian_pkgs.sh /internal
+COPY ./build_python_pkgs.sh /internal
 
 # NOTE
 # parallel make to build swift C++

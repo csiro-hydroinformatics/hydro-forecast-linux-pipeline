@@ -20,7 +20,7 @@ SUDOCMD=
 _build_py_pkg () {
     if [ ! -e ${PKG_SRC} ]; then
         echo "FAILED: directory not found: $PKG_SRC";
-        return 1;
+        exit 1;
     fi
     cd $PKG_SRC
     mkdir -p dist
@@ -39,7 +39,7 @@ _build_py_pkg () {
         # else
         #     echo "DEBUG active: leaving directory $DEST_PKG";
         # fi
-        return 1;
+        exit 1;
     fi
 }
 
