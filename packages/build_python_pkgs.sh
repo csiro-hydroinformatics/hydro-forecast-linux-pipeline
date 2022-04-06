@@ -25,7 +25,7 @@ _build_py_pkg () {
     cd $PKG_SRC
     mkdir -p dist
     rm dist/*
-    python setup.py sdist bdist_wheel
+    python3 setup.py sdist bdist_wheel
 
     if [ $? == 0 ]; then
         echo "OK: built python package $PKG_SRC";
