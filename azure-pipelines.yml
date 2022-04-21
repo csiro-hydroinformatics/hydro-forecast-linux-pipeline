@@ -48,7 +48,7 @@ stages:
           echo Build.SourcesDirectory=$(Build.SourcesDirectory)
           ls $(Build.SourcesDirectory)
     - task: Bash@3
-      displayName: 'Build debian packages'
+      displayName: 'Build debian and python packages'
       inputs:
         targetType: 'inline'
         script: |
