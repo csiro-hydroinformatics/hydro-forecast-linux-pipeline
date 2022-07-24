@@ -83,7 +83,7 @@ else
 fi
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libmoirai_1.0-1_amd64.deb
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing libmoirai";
     exit 1;
 fi
@@ -105,7 +105,7 @@ else
 fi
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libcinterop-dev_1.1-1_amd64.deb
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing libcinterop";
     exit 1;
 fi
@@ -127,7 +127,7 @@ fi
 
 dpkg -c ${DEB_PKGS_DIR}/libboost-threadpool-dev_0.2-6_amd64.deb
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libboost-threadpool-dev_0.2-6_amd64.deb
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing threadpool";
     exit 1;
 fi
@@ -149,7 +149,7 @@ fi
 
 dpkg -c ${DEB_PKGS_DIR}/libwila-dev_0.7-1_amd64.deb 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libwila-dev_0.7-1_amd64.deb 
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing wila";
     exit 1;
 fi
@@ -171,7 +171,7 @@ fi
 
 dpkg -c ${DEB_PKGS_DIR}/libsfsl-dev_2.3-1_amd64.deb
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libsfsl-dev_2.3-1_amd64.deb
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing sfsl";
     exit 1;
 fi
@@ -196,7 +196,7 @@ dpkg -c ${DEB_PKGS_DIR}/libuchronia-dev_2.3-1_amd64.deb
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libuchronia_2.3-1_amd64.deb 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libuchronia-dev_2.3-1_amd64.deb 
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing uchronia";
     exit 1;
 fi
@@ -221,7 +221,7 @@ dpkg -c ${DEB_PKGS_DIR}/libswift-dev_2.3-7_amd64.deb
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift_2.3-7_amd64.deb 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift-dev_2.3-7_amd64.deb 
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing swift";
     exit 1;
 fi
@@ -246,7 +246,7 @@ dpkg -c ${DEB_PKGS_DIR}/libqppcore-dev_2.3-7_amd64.deb
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libqppcore_2.3-7_amd64.deb 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libqppcore-dev_2.3-7_amd64.deb 
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing qppcore";
     exit 1;
 fi
@@ -271,7 +271,7 @@ dpkg -c ${DEB_PKGS_DIR}/libqpp-dev_2.3-7_amd64.deb
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libqpp_2.3-7_amd64.deb 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libqpp-dev_2.3-7_amd64.deb 
-if [ $? == 0 ]; then
+if [ ! $? == 0 ]; then
     echo "FAILED: installing qpp";
     exit 1;
 fi
