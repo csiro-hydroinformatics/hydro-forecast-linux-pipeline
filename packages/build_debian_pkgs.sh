@@ -201,7 +201,7 @@ ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift-dev_2.3-7_amd64.deb
 
 src_pkgname=qppcore
 vernum=2.3
-SRC=${SRC_CSIRO}/qpp/libqppcore
+SRC=${SRC_ROOT}/qpp/libqppcore
 FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qppcore.pc.in include/"
 _build_tarball
 
@@ -222,7 +222,7 @@ sudo dpkg -i ${DEB_PKGS_DIR}/libqppcore-dev_2.3-7_amd64.deb
 
 src_pkgname=qpp
 vernum=2.3
-SRC=${SRC_CSIRO}/qpp/libqpp
+SRC=${SRC_ROOT}/qpp/libqpp
 FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qpp.pc.in include/"
 _build_tarball
 
