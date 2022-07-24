@@ -45,7 +45,11 @@ stages:
         script: |
           cd $(Build.SourcesDirectory)/packages
           mkdir -p $(root_out_dir)
+          echo "ls $(root_out_dir)"
+          ls $(root_out_dir)
           ./build-packages.sh $(root_out_dir)
+          echo "ls $(root_out_dir)"
+          ls $(root_out_dir)
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
     # I could not locate an existing, or at least easy to use, point 
@@ -78,8 +82,9 @@ stages:
       displayName: 'Copy build output to the artifact staging directory'
       inputs:
         sourceFolder: '$(root_out_dir)'
-        contents: '**'
-        targetFolder: '$(Build.ArtifactStagingDirectory)/release'
+        contents: |
+              ./**/*
+      targetFolder: '$(Build.ArtifactStagingDirectory)/release'
 
     - task: CopyFiles@2
       displayName: Copy files for installer version
