@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+set -e
 
 SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 TEST_PAT=${TEST_PAT_ENV_VAR}
