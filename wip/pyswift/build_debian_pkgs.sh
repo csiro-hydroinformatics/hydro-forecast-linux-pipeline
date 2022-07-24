@@ -23,7 +23,7 @@ _clean_debbuild() {
 
 _build_tarball () {
     if [ ! -e ${SRC} ]; then
-        echo "FAILED: direcory not found: $SRC";
+        echo "FAILED: directory not found: $SRC";
         exit 1;
     fi
     src_pkgname_ver=${src_pkgname}-${vernum}

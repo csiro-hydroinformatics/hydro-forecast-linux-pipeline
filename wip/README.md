@@ -35,3 +35,16 @@ docker run \
 ```
 
 docker rm $(docker ps -a -q)
+
+```sh
+AZ_REPO=$(lsb_release -cs)
+echo $AZ_REPO
+sudo apt-get install azure-cli
+az login
+az extension add --name azure-devops
+```
+
+```sh
+az artifacts universal download --organization "https://dev.azure.com/OD222236-DigWaterAndLandscapes/" --project "072b5225-8b0e-4eff-9dba-2f116e1b3464" --scope project --feed "hydro_forecast_deb" --name "swift_deb" --version "0.1.18" --path .
+```
+
