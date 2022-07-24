@@ -84,7 +84,7 @@ stages:
         sourceFolder: '$(root_out_dir)'
         contents: |
               ./**/*
-      targetFolder: '$(Build.ArtifactStagingDirectory)/release'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/release'
 
     - task: CopyFiles@2
       displayName: Copy files for installer version
