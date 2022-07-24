@@ -114,3 +114,20 @@ ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
 #########################################################
 
+
+SRC=${SRC_ROOT}/qpp
+PKG_SRC=${SRC}/bindings/python/fogss
+
+_build_py_pkg
+
+if [ ! $? == 0 ]; then
+    exit 1;
+else
+    echo "OK: copying python wheel to ${PY_PKGS_DIR}";
+    cp ${PKG_SRC}/dist/*.whl ${PY_PKGS_DIR}/
+fi
+
+${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
+
+#########################################################
+

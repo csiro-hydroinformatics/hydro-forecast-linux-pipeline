@@ -1,29 +1,20 @@
 # Builds hydrologic forecast packages or installer (Debian, Python)
 #
-# Triggered when a change is pushed to the dev-deploy branch on the 
-# github repository https://github.com/waa-tool/electron-waa 
-# This replaces the build previously handled by an on-premise Jenkins server, lw-74-cdc
-#
-# This pipeline largely reuses the preexisting infrastructure to build servers and front end.
-# The final packaging and versioning is however significantly new
-#
-# See ./doc/azure_pipelines.md
 
 trigger:
 - deb_build
-
-# resources:
-#   repositories:
-#   - repository: NumericalSlCpp # In a different organization
-#     endpoint: NumericalSlCppGitServiceConnection
-#     type: git
-#     name: CsiroBitbucket/NumericalSlCppRepo
 
 resources:
 - repo: self
 
 variables:
   tag: '$(Build.BuildId)'
+  # use pipeline_src_dir to facilitate testing out of Azure Pipeline
+  pipeline_src_dir: $(Build.SourcesDirectory)
+  root_out_dir: $(Build.BinariesDirectory)/outputs
+  deb_out_dir: $(Build.BinariesDirectory)/outputs/deb
+  py_out_dir: $(Build.BinariesDirectory)/outputs/py
+  r_out_dir: $(Build.BinariesDirectory)/outputs/r
 
 # to get a custom '$(Build.BuildNumber)', and 'r' is a counter reset to 1 every change of the major/minor versions
 # TODO: reference to this technique on the web?
@@ -53,16 +44,10 @@ stages:
         targetType: 'inline'
         script: |
           cd $(Build.SourcesDirectory)/packages
-          echo yaml pipeline: TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
-          echo yaml pipeline: LOCAL_TEST_PAT_ENV_VAR=$LOCAL_TEST_PAT_ENV_VAR
-          # spits out yml pipeline: TEST_PAT_ENV_VAR=$(TEST_PAT)
-          mkdir -p $(Build.SourcesDirectory)/artifacts
-          ./build-packages.sh $(Build.SourcesDirectory)/artifacts
+          mkdir -p $(root_out_dir)
+          ./build-packages.sh $(root_out_dir)
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
-        # But this is not working for me. WTH?
-        TEST_PAT_ENV_VAR: $(TEST_PAT) 
-        LOCAL_TEST_PAT_ENV_VAR: blah 
     # I could not locate an existing, or at least easy to use, point 
     # where we can check the "latest version" from the feed we populate with artifacts.
     # Let's create something small (not 100MB like the full installer) to be more nimble when
@@ -72,8 +57,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          mkdir -p $(Build.SourcesDirectory)/version
-          echo $(Build.BuildNumber) > $(Build.SourcesDirectory)/version/version.txt
+          mkdir -p $(Build.BinariesDirectory)/version
+          echo $(Build.BuildNumber) > $(Build.BinariesDirectory)/version/version.txt
     #- task: Bash@3
     #  displayName: 'Debug task only, check locations'
     #  inputs:
@@ -92,14 +77,14 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy build output to the artifact staging directory'
       inputs:
-        sourceFolder: '$(Build.SourcesDirectory)/artifacts'
-        contents: '*.*'
+        sourceFolder: '$(root_out_dir)'
+        contents: '**'
         targetFolder: '$(Build.ArtifactStagingDirectory)/release'
 
     - task: CopyFiles@2
       displayName: Copy files for installer version
       inputs:
-        sourceFolder: '$(Build.SourcesDirectory)/version'
+        sourceFolder: '$(Build.BinariesDirectory)/version'
         contents: '*.*'
         targetFolder: '$(Build.ArtifactStagingDirectory)/version'
 

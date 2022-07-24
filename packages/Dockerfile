@@ -17,6 +17,7 @@ WORKDIR /internal
 COPY ./entrypoint.sh /internal
 COPY ./build_debian_pkgs.sh /internal
 COPY ./build_python_pkgs.sh /internal
+COPY ./build_r_pkgs.sh /internal
 
 # NOTE
 # parallel make to build swift C++
@@ -30,6 +31,8 @@ RUN apt-get update && apt-get install -y \
   catch \
   g++ \
   nano \
+  p7zip-full \
+  curl \
   libboost-system-dev \
   libboost-date-time-dev \
   libboost-regex-dev \
@@ -42,6 +45,7 @@ RUN apt-get update && apt-get install -y \
   libeigen3-dev \
   libyaml-cpp-dev \
   libjsoncpp-dev \
+  r-cran-knitr \
   r-cran-lubridate \
   r-cran-zoo \
   r-cran-xts \
@@ -51,8 +55,13 @@ RUN apt-get update && apt-get install -y \
   r-cran-plyr \
   r-cran-ncdf4 \
   r-cran-udunits2 \
+  r-cran-igraph \
   r-cran-roxygen2 \
-  r-cran-devtools \ 
+  r-cran-markdown \
+  r-cran-stringr \
+  r-cran-devtools \
+  pandoc \
+  pandoc-citeproc \
   python3 \
   python3-venv\
   python3-pip \

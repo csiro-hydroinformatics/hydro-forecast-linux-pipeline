@@ -1,52 +1,55 @@
 #!/bin/bash
 
+# directory where to put all the finalised .deb files
 DEB_PKGS_DIR=$1
+# Root of the source directory, where all the checked out repositories are
 SRC_ROOT=$2
-DEST_ROOT=$3
+# temporary, working directory where pkgs are built
+DEB_BUILD_ROOT=$3
 
 # DEB_PKGS_DIR=${HOME}/tmp/debs
 # SRC_ROOT=${HOME}/src
-# DEST_ROOT=${HOME}/tmp/debbuild
+# DEB_BUILD_ROOT=${HOME}/tmp/debbuild
 
 DEBUG_DEB=0
 
 mkdir -p ${DEB_PKGS_DIR}
-mkdir -p ${DEST_ROOT}
+mkdir -p ${DEB_BUILD_ROOT}
 
 SUDOCMD=
 #SUDOCMD=sudo
 
 _clean_debbuild() {
     cd $SRC
-    rm -rf ${DEST_PKG}/*
+    rm -rf ${DEB_BUILD_PKG}/*
 }
 
 _build_tarball () {
     if [ ! -e ${SRC} ]; then
-        echo "FAILED: direcory not found: $SRC";
+        echo "FAILED: directory not found: $SRC";
         exit 1;
     fi
     src_pkgname_ver=${src_pkgname}-${vernum}
     src_pkgname_orig_directory=${src_pkgname_ver}
     fn_ver=${src_pkgname}_${vernum}
-    DEST_PKG=${DEST_ROOT}/${src_pkgname}/
-    DEST=${DEST_PKG}/${src_pkgname}/${src_pkgname_orig_directory}
+    DEB_BUILD_PKG=${DEB_BUILD_ROOT}/${src_pkgname}/
+    DEB_BUILD=${DEB_BUILD_PKG}/${src_pkgname}/${src_pkgname_orig_directory}
     if [ $DEBUG_DEB == 0 ]; then
-        if [ -e ${DEST} ]; then
-            echo "OK?: Found existing directory $DEST ; Assuming this is already built";
+        if [ -e ${DEB_BUILD} ]; then
+            echo "OK?: Found existing directory $DEB_BUILD ; Assuming this is already built";
             return 0;
         fi
     fi
-    mkdir -p ${DEST_PKG}
-    rm -rf ${DEST_PKG}/*
-    mkdir -p ${DEST}
+    mkdir -p ${DEB_BUILD_PKG}
+    rm -rf ${DEB_BUILD_PKG}/*
+    mkdir -p ${DEB_BUILD}
     cd ${SRC}
-    cp -Rf ${FILES} ${DEST}/
-    cd ${DEST}
+    cp -Rf ${FILES} ${DEB_BUILD}/
+    cd ${DEB_BUILD}
     # ls -a
-    cd ${DEST}/..
+    cd ${DEB_BUILD}/..
     tar -zcvf ${fn_ver}.orig.tar.gz ${src_pkgname_orig_directory}
-    cd ${DEST}
+    cd ${DEB_BUILD}
     debuild -us -uc 
     if [ $? == 0 ]; then
         echo "OK: built $src_pkgname";
@@ -55,9 +58,9 @@ _build_tarball () {
         echo "FAILED: $src_pkgname";
         cd ${SRC}
         if [ $DEBUG_DEB == 0 ]; then
-            rm -rf ${DEST_PKG}/*
+            rm -rf ${DEB_BUILD_PKG}/*
         else
-            echo "DEBUG active: leaving directory $DEST_PKG";
+            echo "DEBUG active: leaving directory $DEB_BUILD_PKG";
         fi
         exit 1;
     fi
@@ -75,7 +78,7 @@ if [ ! $? == 0 ]; then
     exit 1;
 else
     echo "OK: copying to ${DEB_PKGS_DIR}";
-    cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libmoirai_1.0-1_amd64.deb
@@ -93,7 +96,7 @@ if [ ! $? == 0 ]; then
     exit 1;
 else
     echo "OK: copying to ${DEB_PKGS_DIR}";
-    cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libcinterop-dev_1.1-1_amd64.deb
@@ -110,7 +113,7 @@ if [ ! $? == 0 ]; then
     exit 1;
 else
     echo "OK: copying to ${DEB_PKGS_DIR}";
-    cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
 dpkg -c ${DEB_PKGS_DIR}/libboost-threadpool-dev_0.2-6_amd64.deb
@@ -128,7 +131,7 @@ if [ ! $? == 0 ]; then
     exit 1;
 else
     echo "OK: copying to ${DEB_PKGS_DIR}";
-    cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
 dpkg -c ${DEB_PKGS_DIR}/libwila-dev_0.7-1_amd64.deb 
@@ -146,7 +149,7 @@ if [ ! $? == 0 ]; then
     exit 1;
 else
     echo "OK: copying to ${DEB_PKGS_DIR}";
-    cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
 dpkg -c ${DEB_PKGS_DIR}/libsfsl-dev_2.3-1_amd64.deb
@@ -164,7 +167,7 @@ if [ ! $? == 0 ]; then
     exit 1;
 else
     echo "OK: copying to ${DEB_PKGS_DIR}";
-    cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
 dpkg -c ${DEB_PKGS_DIR}/libuchronia_2.3-1_amd64.deb 
@@ -185,7 +188,7 @@ if [ ! $? == 0 ]; then
     exit 1;
 else
     echo "OK: copying to ${DEB_PKGS_DIR}";
-    cp ${DEST}/../*.deb ${DEB_PKGS_DIR}/
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
 fi
 
 dpkg -c ${DEB_PKGS_DIR}/libswift_2.3-7_amd64.deb 
@@ -193,4 +196,48 @@ dpkg -c ${DEB_PKGS_DIR}/libswift-dev_2.3-7_amd64.deb
 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift_2.3-7_amd64.deb 
 ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libswift-dev_2.3-7_amd64.deb 
+
+#########################################################
+
+src_pkgname=qppcore
+vernum=2.3
+SRC=${SRC_CSIRO}/qpp/libqppcore
+FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qppcore.pc.in include/"
+_build_tarball
+
+if [ ! $? == 0 ]; then
+    exit 1;
+else
+    echo "OK: copying to ${DEB_PKGS_DIR}";
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
+fi
+
+dpkg -c ${DEB_PKGS_DIR}/libqppcore_2.3-7_amd64.deb 
+dpkg -c ${DEB_PKGS_DIR}/libqppcore-dev_2.3-7_amd64.deb 
+
+sudo dpkg -i ${DEB_PKGS_DIR}/libqppcore_2.3-7_amd64.deb 
+sudo dpkg -i ${DEB_PKGS_DIR}/libqppcore-dev_2.3-7_amd64.deb 
+
+#########################################################
+
+src_pkgname=qpp
+vernum=2.3
+SRC=${SRC_CSIRO}/qpp/libqpp
+FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qpp.pc.in include/"
+_build_tarball
+
+if [ ! $? == 0 ]; then
+    exit 1;
+else
+    echo "OK: copying to ${DEB_PKGS_DIR}";
+    cp ${DEB_BUILD}/../*.deb ${DEB_PKGS_DIR}/
+fi
+
+dpkg -c ${DEB_PKGS_DIR}/libqpp_2.3-7_amd64.deb 
+dpkg -c ${DEB_PKGS_DIR}/libqpp-dev_2.3-7_amd64.deb 
+
+sudo dpkg -i ${DEB_PKGS_DIR}/libqpp_2.3-7_amd64.deb 
+sudo dpkg -i ${DEB_PKGS_DIR}/libqpp-dev_2.3-7_amd64.deb 
+
+#########################################################
 

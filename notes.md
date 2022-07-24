@@ -20,8 +20,6 @@ e.g.
 `git clone https://per202:abcdeabcdeabcdeabcdeabcde%2Feabcde%2Fabcde@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git`
 
 
-
-
 `docker build -t swift2-easi-debbuild .`
 
 Interesting read while looking for how to specifgy sustom cmake_mdule_path

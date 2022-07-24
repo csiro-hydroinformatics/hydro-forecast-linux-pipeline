@@ -27,3 +27,11 @@ ssh://git@bitbucket.csiro.au:7999/sf/easi-hydro-forecast.git
 
 jean-michel.perraud@csiro.au
 david.robertson@csiro.au
+
+```sh
+artifact_dir=${HOME}/tmp/test_artifacts
+mkdir -p ${artifact_dir}
+cd ./packages
+./build-packages.sh ${artifact_dir}
+```
+
