@@ -5,10 +5,10 @@ SRC_ROOT=$2
 
 #####  
 ## TESTS
-ROOT_OUT_DIR=$HOME/tmp/test_artifacts/
-SRC_ROOT=$HOME/src
-CSIRO_BITBUCKET=${SRC_ROOT}
-GITHUB_REPOS=${SRC_ROOT}
+# ROOT_OUT_DIR=$HOME/tmp/test_artifacts/
+# SRC_ROOT=$HOME/src
+# CSIRO_BITBUCKET=${SRC_ROOT}
+# GITHUB_REPOS=${SRC_ROOT}
 
 # ROOT_OUT_DIR=${HOME}/tmp/debs
 # SRC_ROOT=${HOME}/src

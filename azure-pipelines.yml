@@ -83,7 +83,10 @@ stages:
       inputs:
         sourceFolder: '$(root_out_dir)'
         contents: |
-              ./**/*
+              deb_pkgs/**
+              py_pkgs/**
+              r_pkgs/**
+              *.*
         targetFolder: '$(Build.ArtifactStagingDirectory)/release'
 
     - task: CopyFiles@2
