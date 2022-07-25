@@ -75,7 +75,8 @@ fi
 ${R_VANILLA} CMD INSTALL msvs_*.tar.gz
 cp msvs_*.tar.gz ${R_SRC_REPO_PATH}/
 
-TEST_DATA_DIR=${ROOT_OUT_DIR}/tmp/data
+# TEST_DATA_DIR=${ROOT_OUT_DIR}/tmp/data
+TEST_DATA_DIR=${HOME}/tmp/data
 mkdir -p ${TEST_DATA_DIR}
 
 cd ${TEST_DATA_DIR}
