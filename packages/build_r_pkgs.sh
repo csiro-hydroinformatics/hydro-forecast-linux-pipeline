@@ -24,6 +24,11 @@ if [ ! -e $HOME/.Renviron ]; then
 fi
 
 cd ${ROOT_OUT_DIR}
+if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
+    echo "Not found: ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r"
+    exit 1;
+fi
+
 Rscript ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r
 
 # NOTE: installs a lot.

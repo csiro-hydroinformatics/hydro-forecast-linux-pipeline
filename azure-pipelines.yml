@@ -107,7 +107,7 @@ stages:
     #    publishLocation: 'pipeline'
 
     - task: UniversalPackages@0
-      displayName: Build installer as U.P.
+      displayName: Publish output bundle
       inputs:
         command: publish
         publishDirectory: '$(Build.ArtifactStagingDirectory)/release'
@@ -118,7 +118,7 @@ stages:
         packagePublishDescription: 'Debian packages for swift and co.'
 
     - task: UniversalPackages@0
-      displayName: Build version check as U.P.
+      displayName: Publish output bundle version
       inputs:
         command: publish
         publishDirectory: '$(Build.ArtifactStagingDirectory)/version'
