@@ -137,7 +137,10 @@ echo `date` >> README.md
 
 
 # Change the ownership of the newly produced files
-cp -r ${ROOT_BUILD_DIR}/* /pkgs/
+cd ${ROOT_BUILD_DIR}/
+cp -r * /pkgs/
 cd /pkgs/
+echo "DEBUG: Content of mapped /pkgs/"
+ls 
 # touch test.txt
 chown -R ${CURRENT_UID} *

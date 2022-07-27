@@ -5,13 +5,14 @@ SRC_ROOT=$2
 
 #####  
 ## TESTS
-ROOT_OUT_DIR=$HOME/tmp/test_artifacts/
-SRC_ROOT=$HOME/src
+# ROOT_OUT_DIR=$HOME/tmp/test_artifacts/
+# SRC_ROOT=$HOME/src
+# ROOT_OUT_DIR=${HOME}/tmp/debs
+# SRC_ROOT=${HOME}/src
+
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
 
-# ROOT_OUT_DIR=${HOME}/tmp/debs
-# SRC_ROOT=${HOME}/src
 
 DEBUG_R=0
 
@@ -24,6 +25,11 @@ if [ ! -e $HOME/.Renviron ]; then
 fi
 
 cd ${ROOT_OUT_DIR}
+if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
+    echo "Not found: ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r"
+    exit 1;
+fi
+
 Rscript ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r
 
 # NOTE: installs a lot.
@@ -69,7 +75,8 @@ fi
 ${R_VANILLA} CMD INSTALL msvs_*.tar.gz
 cp msvs_*.tar.gz ${R_SRC_REPO_PATH}/
 
-TEST_DATA_DIR=${ROOT_OUT_DIR}/tmp/data
+# TEST_DATA_DIR=${ROOT_OUT_DIR}/tmp/data
+TEST_DATA_DIR=${HOME}/tmp/data
 mkdir -p ${TEST_DATA_DIR}
 
 cd ${TEST_DATA_DIR}
