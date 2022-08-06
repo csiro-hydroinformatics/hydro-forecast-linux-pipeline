@@ -16,7 +16,7 @@ DEBUG_DEB=0
 mkdir -p ${DEB_PKGS_DIR}
 mkdir -p ${DEB_BUILD_ROOT}
 
-if [ -z ${SUDOCMD+x} ]; then
+if [ ! -z ${SUDOCMD+x} ]; then
     SUDOCMD=
 fi
 
@@ -104,8 +104,8 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname} $deb_version
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname} $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
@@ -117,7 +117,9 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
+
+# NOTE: should config-utils also be built?
 
 #########################################################
 
@@ -129,7 +131,7 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
@@ -141,7 +143,7 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
@@ -153,7 +155,7 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
@@ -165,8 +167,8 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname} $deb_version
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname} $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
@@ -178,8 +180,8 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname} $deb_version
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname} $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
@@ -191,8 +193,8 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname} $deb_version
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname} $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
@@ -204,8 +206,8 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
-_install_deb() lib${src_pkgname} $deb_version
-_install_deb() lib${src_pkgname}-dev $deb_version
+_install_deb lib${src_pkgname} $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
