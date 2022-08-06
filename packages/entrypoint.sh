@@ -20,7 +20,7 @@ mkdir -p ${CSIRO_BITBUCKET} \
   && cd .. \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
   && cd numerical-sl-cpp \
-  && git checkout testing \
+  && git checkout experimental \
   && cd .. \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/datatypes.git \
   && cd datatypes \
@@ -52,7 +52,7 @@ mkdir -p ${GITHUB_REPOS} \
   && git checkout experimental \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/pyrefcount.git \
-  && cd rcpp-interop-commons \
+  && cd pyrefcount \
   && git checkout testing \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/threadpool.git \
