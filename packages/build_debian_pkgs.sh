@@ -16,9 +16,9 @@ DEBUG_DEB=0
 mkdir -p ${DEB_PKGS_DIR}
 mkdir -p ${DEB_BUILD_ROOT}
 
-SUDOCMD=
-# for testing on a local machine:
-#SUDOCMD=sudo
+if [ -z ${SUDOCMD+x} ]; then
+    SUDOCMD=
+fi
 
 _clean_debbuild() {
     cd $SRC
