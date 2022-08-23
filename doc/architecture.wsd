@@ -1,0 +1,157 @@
+@startuml software-map
+
+' Maybe. 
+!include <logos/r-lang.puml>
+!include <logos/python.puml>
+' !include <logos/typescript.puml>
+' !include <logos/kubernetes.puml>
+' !include <logos/flask.puml>
+!include <logos/c.puml>
+!include <logos/c-plusplus.puml>
+' !include <logos/docker.puml>
+
+' left to right direction
+
+' package "cruise-control" {
+' }
+
+' floating note 
+'   Consider: Senaps, Eagle, Hydroshare.
+'   Links to Digital Water 
+' end note
+
+package "rpp-g" {
+    rectangle "<$c-plusplus>\ncpp" as rpp_cpp_code #LightSalmon
+}
+package "qpp" {
+    rectangle "<$c-plusplus>\ncpp" as qpp_cpp_code #LightSalmon
+    rectangle "<$python>\nfogss" as fogss_py #LightGreen
+    rectangle "<$r-lang>\nqpp" as fogss_r #LightSkyBlue
+
+}
+package "swift" {
+    rectangle "<$c-plusplus>\ncpp" as swift_cpp_code #LightSalmon
+    rectangle "<$python>\nswift2" as swift_py #LightGreen
+    rectangle "<$r-lang>\nswift" as swift_r #LightSkyBlue
+}
+package "numerical-sl-cpp" {
+    rectangle "<$c-plusplus>\ncpp" as sfsl_cpp_code #LightSalmon
+}
+package "uchronia" {
+    rectangle "<$c-plusplus>\ncpp" as uchronia_cpp_code #LightSalmon
+    rectangle "<$python>\nuchronia" as uchronia_py #LightGreen
+    rectangle "<$r-lang>\nuchronia" as uchronia_r #LightSkyBlue
+
+}
+package "c-interop" {
+    rectangle "<$c-plusplus>\ncinterop" as cinterop_cpp_code #LightSalmon
+    rectangle "<$python>\ncinterop" as cinterop_py #LightGreen
+    rectangle "<$r-lang>\ncinterop" as cinterop_r #LightSkyBlue
+}
+
+package "wila" {
+    rectangle "<$c-plusplus>\ncpp" as wila_cpp_code #LightSalmon
+}
+package "moirai" {
+    rectangle "<$c-plusplus>\ncpp" as moirai_cpp_code #LightSalmon
+}
+package "pyrefcount" {
+    rectangle "<$python>\nrefcount" as refcount_py #LightGreen
+}
+package "vcpp-commons" {
+    rectangle ".props" as vcpp_props #LightPink
+}
+' package "config-utils" {
+' }
+
+package "mhplot" {
+    rectangle "<$r-lang>\nmhplot" as mhplot_r #LightSkyBlue
+}
+
+package "third parties" as third_parties {
+    rectangle "<$c-plusplus>\nEigen3" as eigen_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nBoost" as boost_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nthreadpool" as threadpool_cpp_code #LightSalmon
+    rectangle "<$python>\ncffi" as cffi_py #LightGreen
+}
+
+rectangle {
+
+    package "build pipelines" {
+        rectangle "debian pkgs\npython pkgs\nDLLs\nR pkgs"
+    }
+
+    package "c-api-generation" {
+        rectangle "F#/C#" as cs_gen_code #LightGoldenRodYellow
+    }
+
+    package "efts" {
+        rectangle "<$r-lang>\nefts" as efts_r #LightSkyBlue
+    }
+    package "efts-python" {
+        rectangle "<$python>\nefts" as efts_py #LightGreen
+    }
+
+}
+
+package "lake1d" {
+    rectangle "<$c-plusplus>\ncpp" as lake1d_cpp_code #LightSalmon
+    rectangle "<$python>\nlake1d" as lake1d_py #LightGreen
+    ' rectangle "<$r-lang>\nuchronia" as lake1d_r #LightSkyBlue
+}
+
+uchronia_cpp_code --> moirai_cpp_code 
+' uchronia_cpp_code --> boost_cpp_code
+swift_cpp_code --> uchronia_cpp_code
+swift_cpp_code --> wila_cpp_code
+swift_cpp_code --> sfsl_cpp_code
+' qpp_cpp_code --> eigen_cpp_code
+sfsl_ref --> eigen_cpp_code
+' wila_cpp_code --> threadpool_cpp_code
+qpp_cpp_code --> swift_cpp_code
+threadpool_cpp_code --> boost_cpp_code
+wila_ref --> threadpool_cpp_code
+
+refcount_py --> cffi_py
+cinterop_py --> refcount_py
+uchronia_py --> cinterop_py
+lake1d_py --> cinterop_py
+swift_py --> uchronia_py
+fogss_py --> swift_py
+cinterop_py --> cinterop_cpp_code
+
+cinterop_r --> cinterop_cpp_code
+
+note right of refcount_py
+    version 1.0
+    UT and doc good. readthedocs.org.
+    appveyor
+    pypi and conda-forge
+end note
+
+note right of cinterop_py
+    version 0.9
+    UT and doc pretty good. readthedocs.org.
+    GH actions
+    pypi
+end note
+
+note top of wila_cpp_code
+    mature codebase.
+end note
+
+note right of swift_py
+    Maturing
+    Can and should be open sourced.
+end note
+
+note top of lake1d
+    https://bitbucket.csiro.au/users/per202/repos/aquawatch-inception/browse
+    jupyter notebooks
+    debian packages
+    docker
+end note
+
+
+
+@enduml
