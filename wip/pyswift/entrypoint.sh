@@ -35,12 +35,12 @@ mkdir -p ${GITHUB_REPOS} \
   && cd moirai \
   && git checkout testing \
   && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/rcpp-interop-commons.git \
-  && cd rcpp-interop-commons \
+  && git clone https://github.com/csiro-hydroinformatics/c-interop.git \
+  && cd c-interop \
   && git checkout testing \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/pyrefcount.git \
-  && cd rcpp-interop-commons \
+  && cd c-interop \
   && git checkout testing \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/threadpool.git \

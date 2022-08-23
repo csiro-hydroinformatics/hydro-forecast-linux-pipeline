@@ -47,8 +47,8 @@ mkdir -p ${GITHUB_REPOS} \
   && cd moirai \
   && git checkout experimental \
   && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/rcpp-interop-commons.git \
-  && cd rcpp-interop-commons \
+  && git clone https://github.com/csiro-hydroinformatics/c-interop.git \
+  && cd c-interop \
   && git checkout experimental \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/pyrefcount.git \

@@ -48,7 +48,7 @@ cd ${GITHUB_REPOS}/moirai
 cd build
 $SUDO_CMD make uninstall
 
-cd ${GITHUB_REPOS}/rcpp-interop-commons
+cd ${GITHUB_REPOS}/c-interop
 cd build
 $SUDO_CMD make uninstall
 

@@ -49,9 +49,9 @@ R_EXE=R
 R_VANILLA="${R_EXE} --no-save --no-restore-data"
 
 
-cd ${GITHUB_REPOS}/rcpp-interop-commons/bindings/R/pkgs
+cd ${GITHUB_REPOS}/c-interop/bindings/R/pkgs
 ${R_VANILLA} -e "library(roxygen2) ; roxygenize('cinterop')"
-${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/rcpp-interop-commons/bindings/R/pkgs/cinterop')"
+${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/c-interop/bindings/R/pkgs/cinterop')"
 rm *.tar.gz
 ${R_VANILLA} CMD build cinterop
 if [ $? != 0 ]; then 

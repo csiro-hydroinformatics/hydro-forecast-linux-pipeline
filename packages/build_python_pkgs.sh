@@ -23,6 +23,7 @@ _build_py_pkg () {
         exit 1;
     fi
     cd $PKG_SRC
+    # TODO: placeholder where we should have the unit tests running.
     mkdir -p dist
     rm dist/*
     python3 setup.py sdist bdist_wheel
@@ -64,7 +65,7 @@ ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
 #########################################################
 
-SRC=${SRC_ROOT}/rcpp-interop-commons
+SRC=${SRC_ROOT}/c-interop
 PKG_SRC=${SRC}/bindings/python/cinterop
 
 _build_py_pkg

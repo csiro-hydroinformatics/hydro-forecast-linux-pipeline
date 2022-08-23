@@ -64,7 +64,7 @@ ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
 #########################################################
 
-SRC=${SRC_ROOT}/rcpp-interop-commons
+SRC=${SRC_ROOT}/c-interop
 PKG_SRC=${SRC}/bindings/python/cinterop
 
 _build_py_pkg

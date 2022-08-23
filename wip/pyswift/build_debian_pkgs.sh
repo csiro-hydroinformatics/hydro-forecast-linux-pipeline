@@ -85,7 +85,7 @@ ${SUDOCMD} dpkg -i ${DEB_PKGS_DIR}/libmoirai-dev_1.0-1_amd64.deb
 
 src_pkgname=cinterop
 vernum=1.1
-SRC=${SRC_ROOT}/rcpp-interop-commons
+SRC=${SRC_ROOT}/c-interop
 FILES="cinterop.pc.in CMakeLists.txt cmake_uninstall.cmake.in debian/ doc/ include/ LICENSE.txt README.md"
 _build_tarball
 
