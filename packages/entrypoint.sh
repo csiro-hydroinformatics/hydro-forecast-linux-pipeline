@@ -20,19 +20,19 @@ mkdir -p ${CSIRO_BITBUCKET} \
   && cd .. \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
   && cd numerical-sl-cpp \
-  && git checkout experimental \
+  && git checkout testing \
   && cd .. \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/datatypes.git \
   && cd datatypes \
-  && git checkout experimental \
+  && git checkout testing \
   && cd .. \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/swift.git \
   && cd swift \
-  && git checkout experimental \
+  && git checkout testing \
   && cd .. \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/qpp.git \
   && cd qpp \
-  && git checkout experimental \
+  && git checkout testing \
   && cd ..
 
 # Clone github repos
@@ -45,11 +45,11 @@ mkdir -p ${GITHUB_REPOS} \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/moirai.git \
   && cd moirai \
-  && git checkout experimental \
+  && git checkout testing \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/c-interop.git \
   && cd c-interop \
-  && git checkout experimental \
+  && git checkout testing \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/pyrefcount.git \
   && cd pyrefcount \
@@ -65,7 +65,7 @@ mkdir -p ${GITHUB_REPOS} \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/wila.git \
   && cd wila \
-  && git checkout experimental \
+  && git checkout testing \
   && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/efts.git \
   && cd efts \
