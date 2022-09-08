@@ -35,6 +35,11 @@ mkdir -p ${CSIRO_BITBUCKET} \
   && git checkout testing \
   && cd ..
 
+if [ $? != 0 ]; then 
+    echo ERROR: Failed to clone one or more repository on CSIRO git server
+    exit $?; 
+fi
+
 # Clone github repos
 
 mkdir -p ${GITHUB_REPOS} \
@@ -79,6 +84,13 @@ mkdir -p ${GITHUB_REPOS} \
   && cd mhplot \
   && git checkout master \
   && cd ..
+
+
+if [ $? != 0 ]; then 
+    echo ERROR: Failed to clone one or more repository on GitHub git server
+    exit $?; 
+fi
+
 
 cd ${GITHUB_REPOS}/config-utils \
   && make install
