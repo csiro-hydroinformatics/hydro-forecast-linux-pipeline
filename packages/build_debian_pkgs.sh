@@ -11,6 +11,10 @@ DEB_BUILD_ROOT=$3
 # SRC_ROOT=${HOME}/src
 # DEB_BUILD_ROOT=${HOME}/tmp/debbuild
 
+# NOTE: do I need to? effect on crafted error handling?
+# set -e  # Exit immediately if a command exits with a non-zero status.
+
+
 DEBUG_DEB=0
 
 mkdir -p ${DEB_PKGS_DIR}

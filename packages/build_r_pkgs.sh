@@ -10,6 +10,8 @@ SRC_ROOT=$2
 # ROOT_OUT_DIR=${HOME}/tmp/debs
 # SRC_ROOT=${HOME}/src
 
+set -e  # Exit immediately if a command exits with a non-zero status.
+
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
 
@@ -31,6 +33,10 @@ if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
 fi
 
 Rscript ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r
+if [ $? != 0 ]; then 
+    echo ERROR: Installations of dependencies with setup_dependent_packages.r appears to have FAILED.
+    exit $?; 
+fi
 
 # NOTE: installs a lot.
 # also installing the dependencies 'cpp11’, 'lifecycle’, 'rlang’, 'tidyselect’, 'vctrs’, 'pillar’, 'cli’, 'vroom’, 'tzdb’, 'viridisLite’, 'gridExtra’, 'dplyr’, 'downloader’, 'glue’, 'htmltools’, 'igraph’, 'influenceR’, 'readr’, 'tibble’, 'viridis’, 'visNetwork’

@@ -132,7 +132,8 @@ fi
 
 cd /internal \
   && chmod +x ./build_r_pkgs.sh \
-  && ./build_r_pkgs.sh ${R_PKGS_DIR} ${SRC_ROOT}
+  && ./build_r_pkgs.sh ${R_PKGS_DIR} ${SRC_ROOT} \
+  || echo "FAILED: build_r_pkgs.sh"; exit 1;
 
 if [ $? == 0 ]; then
     echo "OK: build_r_pkgs.sh completed with no error";
