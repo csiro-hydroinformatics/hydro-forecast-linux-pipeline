@@ -20,6 +20,11 @@ echo CURRENT_UID=${CURRENT_UID}
 # docker build --no-cache --force-rm --build-arg CURRENT_UID_ARG=${CURRENT_UID} -t ${IMAGE_NAME} .
 docker build --build-arg CURRENT_UID_ARG=${CURRENT_UID} -t ${IMAGE_NAME} .
 docker run --rm --name ${IMAGE_NAME} -v "${OUT_ARTIFACT_PATH}:/pkgs/" ${IMAGE_NAME} ${SWIFT_PAT} ${TEST_PAT} 
+ret_code=$?
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Docker image run returned with a nonzero status code.
+    exit $ret_code; 
+fi
 
 echo build-packages.sh: OUT_ARTIFACT_PATH = ${OUT_ARTIFACT_PATH} contains:
 ls ${OUT_ARTIFACT_PATH}

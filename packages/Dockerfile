@@ -60,6 +60,19 @@ RUN apt-get update && apt-get install -y \
   r-cran-markdown \
   r-cran-stringr \
   r-cran-devtools \
+  r-cran-readr \
+  r-cran-tibble \
+  r-cran-cpp11 \
+  r-cran-rlang \
+  r-cran-tidyselect \
+  r-cran-lifecycle \
+  r-cran-pillar \
+  r-cran-viridis \
+  r-cran-viridislite \
+  r-cran-gridextra \
+  r-cran-downloader \
+  r-cran-htmltools \
+  r-cran-glue \
   pandoc \
   pandoc-citeproc \
   python3 \

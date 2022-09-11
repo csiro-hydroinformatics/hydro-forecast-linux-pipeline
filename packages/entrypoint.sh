@@ -8,16 +8,47 @@ echo from entrypoint.sh
 
 set -e  # Exit immediately if a command exits with a non-zero status.
 
+
 SRC_ROOT=/src
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
+
+ROOT_BUILD_DIR=/tmp/build
+DEB_PKGS_DIR=${ROOT_BUILD_DIR}/deb_pkgs
+mkdir -p ${DEB_PKGS_DIR}
+PY_PKGS_DIR=${ROOT_BUILD_DIR}/py_pkgs
+mkdir -p ${PY_PKGS_DIR}
+R_PKGS_DIR=${ROOT_BUILD_DIR}/r_pkgs
+mkdir -p ${R_PKGS_DIR}
 
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/cruise-control.git \
   && cd cruise-control \
-  && git checkout testing \
-  && cd .. \
+  && git checkout testing
+
+# Install R dependencies early: something became amiss recently, perhaps with cran.csiro.au
+# Make sure there is a user Renviron to avoid risks of read-only clash (although theoretical with Docker/jovyan) 
+if [ ! -e $HOME/.Renviron ]; then
+    mkdir -p ${HOME}/R/local
+    echo "R_LIBS=${HOME}/R/local" > $HOME/.Renviron 
+fi
+
+cd ${R_PKGS_DIR}
+if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
+    echo "Not found: ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r"
+    exit 1;
+fi
+
+Rscript ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r
+ret_code=$?
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Installations of dependencies with setup_dependent_packages.r appears to have FAILED.
+    exit $ret_code; 
+fi
+
+
+cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
   && cd numerical-sl-cpp \
   && git checkout testing \
@@ -94,15 +125,6 @@ fi
 
 cd ${GITHUB_REPOS}/config-utils \
   && make install
-
-
-ROOT_BUILD_DIR=/tmp/build
-DEB_PKGS_DIR=${ROOT_BUILD_DIR}/deb_pkgs
-mkdir -p ${DEB_PKGS_DIR}
-PY_PKGS_DIR=${ROOT_BUILD_DIR}/py_pkgs
-mkdir -p ${PY_PKGS_DIR}
-R_PKGS_DIR=${ROOT_BUILD_DIR}/r_pkgs
-mkdir -p ${R_PKGS_DIR}
 
 export DEBUG_DEB=0
 

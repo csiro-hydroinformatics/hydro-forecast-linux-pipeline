@@ -20,23 +20,24 @@ DEBUG_R=0
 
 mkdir -p ${ROOT_OUT_DIR}
 
-# Make sure there is a user Renviron to avoid risks of read-only clash (although theoretical with Docker/jovyan) 
-if [ ! -e $HOME/.Renviron ]; then
-    mkdir -p ${HOME}/R/local
-    echo "R_LIBS=${HOME}/R/local" > $HOME/.Renviron 
-fi
+# # Make sure there is a user Renviron to avoid risks of read-only clash (although theoretical with Docker/jovyan) 
+# if [ ! -e $HOME/.Renviron ]; then
+#     mkdir -p ${HOME}/R/local
+#     echo "R_LIBS=${HOME}/R/local" > $HOME/.Renviron 
+# fi
 
-cd ${ROOT_OUT_DIR}
-if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
-    echo "Not found: ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r"
-    exit 1;
-fi
+# cd ${ROOT_OUT_DIR}
+# if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
+#     echo "Not found: ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r"
+#     exit 1;
+# fi
 
-Rscript ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r
-if [ $? != 0 ]; then 
-    echo ERROR: Installations of dependencies with setup_dependent_packages.r appears to have FAILED.
-    exit $?; 
-fi
+# Rscript ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r
+# ret_code=$?
+# if [ $ret_code != 0 ]; then 
+#     echo ERROR: Installations of dependencies with setup_dependent_packages.r appears to have FAILED.
+#     exit $ret_code; 
+# fi
 
 # NOTE: installs a lot.
 # also installing the dependencies 'cpp11’, 'lifecycle’, 'rlang’, 'tidyselect’, 'vctrs’, 'pillar’, 'cli’, 'vroom’, 'tzdb’, 'viridisLite’, 'gridExtra’, 'dplyr’, 'downloader’, 'glue’, 'htmltools’, 'igraph’, 'influenceR’, 'readr’, 'tibble’, 'viridis’, 'visNetwork’
