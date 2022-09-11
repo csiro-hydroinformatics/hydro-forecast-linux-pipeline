@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:debian:bullseye-20220711-slim
 
 LABEL au.csiro.image.authors="per202@csiro.au"
 
