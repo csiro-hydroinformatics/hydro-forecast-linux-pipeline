@@ -56,10 +56,18 @@ R_EXE=R
 R_VANILLA="${R_EXE} --no-save --no-restore-data"
 
 
+_clean_possible_tarballs () {
+    if test -n "$(find . -maxdepth 1 -name '*.tar.gz' -print -quit)"
+    then
+        rm *.tar.gz
+    fi
+}
+
+
 cd ${GITHUB_REPOS}/c-interop/bindings/R/pkgs
 ${R_VANILLA} -e "library(roxygen2) ; roxygenize('cinterop')"
 ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/c-interop/bindings/R/pkgs/cinterop')"
-rm *.tar.gz
+_clean_possible_tarballs
 ${R_VANILLA} CMD build cinterop
 if [ $? != 0 ]; then 
     echo ERROR: R package build cinterop failed
@@ -73,7 +81,7 @@ ${R_VANILLA} CMD INSTALL cinterop_*.tar.gz
 cd ${GITHUB_REPOS}/config-utils/R/packages
 ${R_VANILLA} -e "roxygen2::roxygenize('msvs')"
 # ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/config-utils/R/packages/msvs')"
-rm *.tar.gz
+_clean_possible_tarballs
 ${R_VANILLA} CMD build msvs
 if [ $? != 0 ]; then 
     echo ERROR: R package build msvs failed
@@ -95,7 +103,7 @@ fi
 export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 
 cd ${CSIRO_BITBUCKET}/datatypes/bindings/R/pkgs
-rm *.tar.gz
+_clean_possible_tarballs
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} uchronia
 if [ $? != 0 ]; then 
     echo ERROR: R package uchronia cinterop failed
@@ -119,7 +127,7 @@ ${R_VANILLA} CMD INSTALL mhplot_*.tar.gz
 cp mhplot_*.tar.gz ${R_SRC_REPO_PATH}/
 
 cd ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs
-rm *.tar.gz
+_clean_possible_tarballs
 ${R_VANILLA} -e "roxygen2::roxygenize('joki')"
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} joki
 ${R_VANILLA} CMD INSTALL joki_*.tar.gz
