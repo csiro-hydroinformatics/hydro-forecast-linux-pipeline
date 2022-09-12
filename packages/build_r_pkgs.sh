@@ -120,7 +120,7 @@ fi
 
 cd ${GITHUB_REPOS}/
 # git clone git@github.com:csiro-hydroinformatics/mhplot.git
-rm mhplot_*.tar.gz
+_clean_possible_tarballs
 ${R_VANILLA} -e "roxygen2::roxygenize('mhplot')"
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} mhplot
 ${R_VANILLA} CMD INSTALL mhplot_*.tar.gz
@@ -162,7 +162,7 @@ ${R_VANILLA} CMD INSTALL swift_*.tar.gz
 cp swift_*.tar.gz ${R_SRC_REPO_PATH}/
 
 cd ${GITHUB_REPOS}/
-rm efts*.tar.gz
+_clean_possible_tarballs
 ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/efts')"
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} efts
 if [ $? != 0 ]; then 
