@@ -34,6 +34,12 @@ if [ ! -e $HOME/.Renviron ]; then
     echo "R_LIBS=${HOME}/R/local" > $HOME/.Renviron 
 fi
 
+# Encountered issues when installing on top of R 4.0.4 from Debian Bullseye, starting Sept 2022, if using cran.csiro.au, and probably any other
+# Something appears to have changed in the dependencies of a CRAN package, perhaps DiagrammeR or dependency. 
+# Instead, using the snapshot kindly provided by Microsoft...
+
+export CRAN_REPOS="https://cran.microsoft.com/snapshot/2021-02-15"
+
 cd ${R_PKGS_DIR}
 if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
     echo "Not found: ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r"
