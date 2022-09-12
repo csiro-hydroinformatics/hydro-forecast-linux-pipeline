@@ -10,7 +10,7 @@ SRC_ROOT=$2
 # ROOT_OUT_DIR=${HOME}/tmp/debs
 # SRC_ROOT=${HOME}/src
 
-set -e  # Exit immediately if a command exits with a non-zero status.
+# set -e  # Exit immediately if a command exits with a non-zero status.
 
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
