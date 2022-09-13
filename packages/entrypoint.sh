@@ -6,7 +6,7 @@ echo from entrypoint.sh
 # echo TEST_PAT=$TEST_PAT
 # echo TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
 
-set -e  # Exit immediately if a command exits with a non-zero status.
+# set -e  # Exit immediately if a command exits with a non-zero status.
 
 
 SRC_ROOT=/src
@@ -53,6 +53,7 @@ if [ $ret_code != 0 ]; then
     exit $ret_code; 
 fi
 
+ret_code=0
 
 cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
@@ -70,15 +71,17 @@ cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/qpp.git \
   && cd qpp \
   && git checkout testing \
-  && cd ..
+  && cd .. || ret_code=1;
 
-if [ $? != 0 ]; then 
+
+if [ $ret_code != 0 ]; then 
     echo ERROR: Failed to clone one or more repository on CSIRO git server
-    exit $?; 
+    exit $ret_code; 
 fi
 
 # Clone github repos
 
+ret_code=0
 mkdir -p ${GITHUB_REPOS} \
   && cd ${GITHUB_REPOS} \
   && git clone https://github.com/csiro-hydroinformatics/vcpp-commons.git \
@@ -120,14 +123,12 @@ mkdir -p ${GITHUB_REPOS} \
   && git clone https://github.com/csiro-hydroinformatics/mhplot.git \
   && cd mhplot \
   && git checkout master \
-  && cd ..
+  && cd .. || ret_code=1;
 
-
-if [ $? != 0 ]; then 
+if [ $ret_code != 0 ]; then 
     echo ERROR: Failed to clone one or more repository on GitHub git server
-    exit $?; 
+    exit $ret_code; 
 fi
-
 
 cd ${GITHUB_REPOS}/config-utils \
   && make install
@@ -136,38 +137,45 @@ export DEBUG_DEB=0
 
 DEB_BUILD_ROOT=/tmp/debbuild
 
+ret_code=0
 cd /internal \
   && chmod +x ./build_debian_pkgs.sh \
-  && ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEB_BUILD_ROOT}
+  && ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEB_BUILD_ROOT} \
+  || ret_code=1;
 
-if [ $? == 0 ]; then
+if [ $ret_code == 0 ]; then
     echo "OK: build_debian_pkgs.sh completed with no error";
 else
     echo "FAILED: build_debian_pkgs.sh";
-    exit 1;
+    exit $ret_code;
 fi
 
+ret_code=0
 cd /internal \
   && chmod +x ./build_python_pkgs.sh \
-  && ./build_python_pkgs.sh ${PY_PKGS_DIR} ${SRC_ROOT}
+  && ./build_python_pkgs.sh ${PY_PKGS_DIR} ${SRC_ROOT}\
+  || ret_code=1;
 
-if [ $? == 0 ]; then
+
+if [ $ret_code == 0 ]; then
     echo "OK: build_python_pkgs.sh completed with no error";
 else
     echo "FAILED: build_python_pkgs.sh";
-    exit 1;
+    exit $ret_code;
 fi
+
+ret_code=0
 
 cd /internal \
   && chmod +x ./build_r_pkgs.sh \
   && ./build_r_pkgs.sh ${R_PKGS_DIR} ${SRC_ROOT} \
-  || echo "FAILED: build_r_pkgs.sh"; exit 1;
+  || ret_code=1;
 
-if [ $? == 0 ]; then
+if [ $ret_code == 0 ]; then
     echo "OK: build_r_pkgs.sh completed with no error";
 else
     echo "FAILED: build_r_pkgs.sh";
-    exit 1;
+    exit $ret_code;
 fi
 
 echo "# Streamflow forecasting debian, R and python packages" > README.md
