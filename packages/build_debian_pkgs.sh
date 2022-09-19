@@ -215,3 +215,16 @@ _install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
+src_pkgname=chypp
+vernum=2.1
+SRC=${SRC_ROOT}/rpp-g-cpp/CHyPP
+FILES="chypp.pc.in CMakeLists.txt cmake_uninstall.cmake.in debian/ include/ src/"
+deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
+
+_checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
+
+_install_deb lib${src_pkgname} $deb_version
+_install_deb lib${src_pkgname}-dev $deb_version
+
+#########################################################
+
