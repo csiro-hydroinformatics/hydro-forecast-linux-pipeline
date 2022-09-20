@@ -72,7 +72,7 @@ cd ${CSIRO_BITBUCKET} \
   && cd qpp \
   && git checkout testing \
   && cd .. \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/rpp-g-cpp.git \
+  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/chypp.git \
   && cd qpp \
   && git checkout testing \
   && cd .. || ret_code=1;
