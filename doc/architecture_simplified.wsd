@@ -1,0 +1,58 @@
+@startuml software-map
+
+' Maybe. 
+!include <logos/r-lang.puml>
+!include <logos/python.puml>
+' !include <logos/typescript.puml>
+' !include <logos/kubernetes.puml>
+' !include <logos/flask.puml>
+!include <logos/c.puml>
+!include <logos/c-plusplus.puml>
+' !include <logos/docker.puml>
+
+' left to right direction
+
+' package "cruise-control" {
+' }
+
+' floating note 
+'   Consider: Senaps, Eagle, Hydroshare.
+'   Links to Digital Water 
+' end note
+
+package "Private" as private_repos {
+    rectangle "<$c-plusplus>\nCHyPP" as rpp_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nFoGSS" as qpp_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nswift" as swift_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nnumerical-libs" as sfsl_cpp_code #LightSalmon
+}
+
+package "Public open source" as public_repos {
+    rectangle "<$c-plusplus>\nuchronia\ntime series" as uchronia_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nc-interop" as cinterop_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nWila\noptimisation" as wila_cpp_code #LightSalmon
+    rectangle "<$c-plusplus>\nMoirai" as moirai_cpp_code #LightSalmon
+    ' rectangle ".props" as vcpp_props #LightPink
+    package "Open source third parties" as third_parties {
+        rectangle "<$c-plusplus>\nEigen3" as eigen_cpp_code #LightSalmon
+        rectangle "<$c-plusplus>\nBoost" as boost_cpp_code #LightSalmon
+        rectangle "<$c-plusplus>\nthreadpool" as threadpool_cpp_code #LightSalmon
+        rectangle "<$c-plusplus>\nyamlcpp, json-cpp" as yaml_json_cpp_code #LightSalmon
+    }
+}
+
+
+uchronia_cpp_code --> moirai_cpp_code 
+' uchronia_cpp_code --> boost_cpp_code
+swift_cpp_code --> uchronia_cpp_code
+swift_cpp_code --> wila_cpp_code
+swift_cpp_code --> sfsl_cpp_code
+' qpp_cpp_code --> eigen_cpp_code
+' wila_cpp_code --> threadpool_cpp_code
+qpp_cpp_code --> swift_cpp_code
+threadpool_cpp_code --> boost_cpp_code
+wila_cpp_code --> third_parties
+uchronia_cpp_code --> third_parties
+private_repos --> third_parties
+
+@enduml

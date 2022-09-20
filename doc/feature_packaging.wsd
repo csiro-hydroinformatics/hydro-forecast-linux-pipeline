@@ -1,0 +1,56 @@
+@startuml software-map
+
+' Maybe. 
+!include <logos/r-lang.puml>
+!include <logos/python.puml>
+' !include <logos/typescript.puml>
+' !include <logos/kubernetes.puml>
+' !include <logos/flask.puml>
+!include <logos/c.puml>
+!include <logos/c-plusplus.puml>
+!include <logos/c-sharp.puml>
+' !include <logos/docker.puml>
+
+' left to right direction
+
+' package "cruise-control" {
+' }
+
+' floating note 
+'   Consider: Senaps, Eagle, Hydroshare.
+'   Links to Digital Water 
+' end note
+
+rectangle "<$c-plusplus>\nswift2 cpp core" as swift_cpp_code #LightSalmon
+rectangle "<$c>\nswift2 C API" as swift_c_code #LightSalmon
+rectangle "<$python>\nswift-py" as swift_py #LightGreen
+rectangle "<$python>\ncffi-py" as cffi #LightGreen
+rectangle "<$r-lang>\nswift-R" as swift_r #LightSkyBlue
+rectangle "<$r-lang>\nRcpp" as rcpp #LightSkyBlue
+rectangle "swift-Matlab" as swift_m #LightGrey
+rectangle "swift-C#" as swift_cs #LightBlue
+
+
+swift_c_code --> swift_cpp_code
+swift_py --> cffi
+cffi --> swift_c_code
+swift_r --> rcpp
+rcpp --> swift_c_code
+swift_m --> swift_c_code
+swift_cs --> swift_c_code
+
+note right of swift_py
+    High-level features with user-centered design
+    Low-level boilerplate mostly generated
+end note
+
+note right of swift_c_code
+    Maximise interoperability
+    Fosters a consistent experience
+    across higher level languages
+end note
+
+
+
+
+@enduml
