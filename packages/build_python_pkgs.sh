@@ -10,7 +10,7 @@ DEBUG_PY=0
 
 mkdir -p ${PY_PKGS_DIR}
 
-pip install wheel twine six pytest
+pip install wheel twine six pytest coverage
 pip install cffi xarray numpy pandas matplotlib jsonpickle
 # seaborn?
 
@@ -96,6 +96,14 @@ fi
 
 ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
+cd $PKG_SRC
+coverage run -m pytest
+if [ ! $? == 0 ]; then
+    exit 1;
+else
+    echo "OK: uchronia unit tests";
+fi
+
 #########################################################
 
 
@@ -112,6 +120,22 @@ else
 fi
 
 ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
+
+# cd $PKG_SRC
+# coverage run -m pytest
+# if [ ! $? == 0 ]; then
+#     exit 1;
+# else
+#     echo "OK: swift2 unit tests";
+# fi
+cd $PKG_SRC/notebooks
+python3 minimal_unit_test.py 
+if [ ! $? == 0 ]; then
+    echo "FAILED: swift2 python3 minimal_unit_test.py";
+    exit 1;
+else
+    echo "OK: swift2 python3 minimal_unit_test.py";
+fi
 
 #########################################################
 
