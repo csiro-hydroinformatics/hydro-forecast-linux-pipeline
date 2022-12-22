@@ -91,15 +91,7 @@ ${R_VANILLA} CMD INSTALL msvs_*.tar.gz
 cp msvs_*.tar.gz ${R_SRC_REPO_PATH}/
 
 # TEST_DATA_DIR=${ROOT_OUT_DIR}/tmp/data
-TEST_DATA_DIR=${HOME}/tmp/data
-mkdir -p ${TEST_DATA_DIR}
-
-cd ${TEST_DATA_DIR}
-if [ ! -e swift_test_data.7z ]; then
-    curl -o swift_test_data.7z https://cloudstor.aarnet.edu.au/plus/s/RU6kLfzuncINu4f/download
-    7z x -y swift_test_data.7z 
-fi
-
+TEST_DATA_DIR=${HOME}/tmp/data # created by python step or earlier, now.
 export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 
 cd ${CSIRO_BITBUCKET}/datatypes/bindings/R/pkgs
