@@ -3,6 +3,7 @@
 
 trigger:
 - main
+- testing
 
 resources:
 - repo: self
