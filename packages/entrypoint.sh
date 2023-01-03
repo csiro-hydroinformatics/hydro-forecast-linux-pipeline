@@ -1,6 +1,6 @@
 #!/bin/bash
 SWIFT_PAT=$1
-TEST_PAT=$2
+BRANCH_NAME=$2
 
 echo from entrypoint.sh
 # echo TEST_PAT=$TEST_PAT
@@ -21,11 +21,32 @@ mkdir -p ${PY_PKGS_DIR}
 R_PKGS_DIR=${ROOT_BUILD_DIR}/r_pkgs
 mkdir -p ${R_PKGS_DIR}
 
+ret_code=0
+
+mkdir -p ${CSIRO_BITBUCKET} \
+  && cd ${CSIRO_BITBUCKET} \
+  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/sf-stack.git \
+  && cd sf-stack \
+  && git checkout ${BRANCH_NAME} || ret_code=1;
+
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Failed to checkout sf-stack
+    exit $ret_code; 
+fi
+
+source ${CSIRO_BITBUCKET}/sf-stack/reponames.sh
+source ${CSIRO_BITBUCKET}/sf-stack/hashsums
+
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/cruise-control.git \
   && cd cruise-control \
-  && git checkout testing
+  && git checkout reposha["cruise-control"] || ret_code=1;
+
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Failed to checkout cruise-control
+    exit $ret_code; 
+fi
 
 # Install R dependencies early: something became amiss recently, perhaps with cran.csiro.au
 # Make sure there is a user Renviron to avoid risks of read-only clash (although theoretical with Docker/jovyan) 
@@ -55,33 +76,45 @@ fi
 
 ret_code=0
 
-cd ${CSIRO_BITBUCKET} \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
-  && cd numerical-sl-cpp \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/datatypes.git \
-  && cd datatypes \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/swift.git \
-  && cd swift \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/qpp.git \
-  && cd qpp \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/chypp.git \
-  && cd chypp \
-  && git checkout testing \
-  && cd .. || ret_code=1;
+for f in ${reponames_bb_checkout[@]} ; do
+  cd ${CSIRO_BITBUCKET} \
+    && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
+    && cd numerical-sl-cpp \
+    && git checkout reposha["$f"] || ret_code=1;
 
-
-if [ $ret_code != 0 ]; then 
-    echo ERROR: Failed to clone one or more repository on CSIRO git server
+  if [ $ret_code != 0 ]; then 
+    echo ERROR: Failed to clone repository $f
     exit $ret_code; 
-fi
+  fi
+done
+
+# cd ${CSIRO_BITBUCKET} \
+#   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
+#   && cd numerical-sl-cpp \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/datatypes.git \
+#   && cd datatypes \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/swift.git \
+#   && cd swift \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/qpp.git \
+#   && cd qpp \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/chypp.git \
+#   && cd chypp \
+#   && git checkout testing \
+#   && cd .. || ret_code=1;
+
+
+# if [ $ret_code != 0 ]; then 
+#     echo ERROR: Failed to clone one or more repository on CSIRO git server
+#     exit $ret_code; 
+# fi
 
 # Clone github repos
 

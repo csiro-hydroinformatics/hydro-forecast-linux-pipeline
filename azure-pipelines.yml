@@ -2,7 +2,7 @@
 #
 
 trigger:
-- deb_build
+- main
 
 resources:
 - repo: self
@@ -52,6 +52,7 @@ stages:
           ls $(root_out_dir)
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
+        BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
     # I could not locate an existing, or at least easy to use, point 
     # where we can check the "latest version" from the feed we populate with artifacts.
     # Let's create something small (not 100MB like the full installer) to be more nimble when
