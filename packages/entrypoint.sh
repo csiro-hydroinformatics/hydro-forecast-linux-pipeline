@@ -39,6 +39,9 @@ source ${CSIRO_BITBUCKET}/sf-stack/hashsums
 
 echo Testing whether reposha has the expected SHA for c-c: ${reposha["cruise-control"]}
 
+# turn the detached message off
+git config --global advice.detachedHead false
+
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/cruise-control.git \
@@ -79,9 +82,10 @@ fi
 ret_code=0
 
 for f in ${reponames_bb_checkout[@]} ; do
+  ret_code=0;
   cd ${CSIRO_BITBUCKET} \
-    && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
-    && cd numerical-sl-cpp \
+    && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/${f}.git \
+    && cd $f \
     && git checkout ${reposha["$f"]} || ret_code=1;
 
   if [ $ret_code != 0 ]; then 
@@ -121,53 +125,67 @@ done
 # Clone github repos
 
 ret_code=0
-mkdir -p ${GITHUB_REPOS} \
-  && cd ${GITHUB_REPOS} \
-  && git clone https://github.com/csiro-hydroinformatics/vcpp-commons.git \
-  && cd vcpp-commons \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/moirai.git \
-  && cd moirai \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/c-interop.git \
-  && cd c-interop \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/pyrefcount.git \
-  && cd pyrefcount \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/threadpool.git \
-  && cd threadpool \
-  && git checkout master \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/config-utils.git \
-  && cd config-utils \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/wila.git \
-  && cd wila \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/efts.git \
-  && cd efts \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/efts-python.git \
-  && cd efts-python \
-  && git checkout testing \
-  && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/mhplot.git \
-  && cd mhplot \
-  && git checkout master \
-  && cd .. || ret_code=1;
 
-if [ $ret_code != 0 ]; then 
-    echo ERROR: Failed to clone one or more repository on GitHub git server
+for f in ${reponames_gh[@]} ; do
+  ret_code=0;
+  cd ${GITHUB_REPOS} \
+    && git clone https://github.com/csiro-hydroinformatics/${f}.git \
+    && cd $f \
+    && git checkout ${reposha["$f"]} || ret_code=1;
+
+  if [ $ret_code != 0 ]; then 
+    echo ERROR: Failed to clone repository $f
     exit $ret_code; 
-fi
+  fi
+done
+
+# mkdir -p ${GITHUB_REPOS} \
+#   && cd ${GITHUB_REPOS} \
+#   && git clone https://github.com/csiro-hydroinformatics/vcpp-commons.git \
+#   && cd vcpp-commons \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/moirai.git \
+#   && cd moirai \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/c-interop.git \
+#   && cd c-interop \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/pyrefcount.git \
+#   && cd pyrefcount \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/threadpool.git \
+#   && cd threadpool \
+#   && git checkout master \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/config-utils.git \
+#   && cd config-utils \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/wila.git \
+#   && cd wila \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/efts.git \
+#   && cd efts \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/efts-python.git \
+#   && cd efts-python \
+#   && git checkout testing \
+#   && cd .. \
+#   && git clone https://github.com/csiro-hydroinformatics/mhplot.git \
+#   && cd mhplot \
+#   && git checkout master \
+#   && cd .. || ret_code=1;
+
+# if [ $ret_code != 0 ]; then 
+#     echo ERROR: Failed to clone one or more repository on GitHub git server
+#     exit $ret_code; 
+# fi
 
 # TEST_DATA_DIR=${ROOT_OUT_DIR}/tmp/data
 TEST_DATA_DIR=${HOME}/tmp/data
