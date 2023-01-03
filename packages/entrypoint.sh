@@ -37,6 +37,8 @@ fi
 source ${CSIRO_BITBUCKET}/sf-stack/reponames.sh
 source ${CSIRO_BITBUCKET}/sf-stack/hashsums
 
+echo Testing whether reposha has the expected SHA for c-c: ${reposha["cruise-control"]}
+
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/cruise-control.git \
