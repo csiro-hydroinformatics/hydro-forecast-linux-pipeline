@@ -41,7 +41,7 @@ mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/cruise-control.git \
   && cd cruise-control \
-  && git checkout reposha["cruise-control"] || ret_code=1;
+  && git checkout ${reposha["cruise-control"]} || ret_code=1;
 
 if [ $ret_code != 0 ]; then 
     echo ERROR: Failed to checkout cruise-control
@@ -80,7 +80,7 @@ for f in ${reponames_bb_checkout[@]} ; do
   cd ${CSIRO_BITBUCKET} \
     && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/numerical-sl-cpp.git \
     && cd numerical-sl-cpp \
-    && git checkout reposha["$f"] || ret_code=1;
+    && git checkout ${reposha["$f"]} || ret_code=1;
 
   if [ $ret_code != 0 ]; then 
     echo ERROR: Failed to clone repository $f
