@@ -101,7 +101,7 @@ _install_deb() {
 
 
 src_pkgname=moirai
-vernum=1.0
+vernum=1.1
 SRC=${SRC_ROOT}/moirai
 FILES="CMakeLists.txt cmake_uninstall.cmake.in src include debian/ doc/ tests moirai.pc.in README.md"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
@@ -164,7 +164,7 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=uchronia
-vernum=2.3
+vernum=2.4
 SRC=${SRC_ROOT}/datatypes/datatypes
 FILES="CMakeLists.txt cmake_uninstall.cmake.in include src debian lib_paths.props.in tests uchronia.pc.in version.cmake"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
@@ -177,7 +177,7 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=swift
-vernum=2.3
+vernum=2.4
 SRC=${SRC_ROOT}/swift/libswift
 FILES="CMakeLists.txt cmake_uninstall.cmake.in workarounds.h *.cpp debian tests swift.pc.in include/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
