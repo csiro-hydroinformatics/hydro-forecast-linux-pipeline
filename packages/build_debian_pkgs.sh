@@ -190,7 +190,7 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=qppcore
-vernum=2.4
+vernum=2.3
 SRC=${SRC_ROOT}/qpp/libqppcore
 FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qppcore.pc.in include/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
@@ -203,7 +203,7 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=qpp
-vernum=2.3
+vernum=2.4
 SRC=${SRC_ROOT}/qpp/libqpp
 FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qpp.pc.in include/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
