@@ -1,5 +1,7 @@
 #!/bin/bash
-set -e
+
+# I think setting `set -e` makes this return with a zero status, even if, say, `docker run` returns a nonzero status.
+# set -e
 
 SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 # TEST_PAT=${TEST_PAT_ENV_VAR}
