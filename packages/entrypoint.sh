@@ -8,7 +8,6 @@ echo from entrypoint.sh
 
 # set -e  # Exit immediately if a command exits with a non-zero status.
 
-
 SRC_ROOT=/src
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
@@ -22,6 +21,14 @@ R_PKGS_DIR=${ROOT_BUILD_DIR}/r_pkgs
 mkdir -p ${R_PKGS_DIR}
 
 ret_code=0
+
+blah_test_fail || ret_code=127
+
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Testing whether the build task fails as early as expected.
+    exit $ret_code; 
+fi
+
 
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
