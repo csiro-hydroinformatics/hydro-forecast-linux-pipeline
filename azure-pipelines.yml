@@ -51,6 +51,7 @@ stages:
           ./build-packages.sh $(root_out_dir)
           echo "ls $(root_out_dir)"
           ls $(root_out_dir)
+        failOnStderr: true
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
         BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
