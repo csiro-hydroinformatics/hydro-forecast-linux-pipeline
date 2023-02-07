@@ -22,13 +22,13 @@ mkdir -p ${R_PKGS_DIR}
 
 ret_code=0
 
-blah_test_fail || ret_code=127
+# used to test WIRADA-669
+# blah_test_fail || ret_code=127
 
-if [ $ret_code != 0 ]; then 
-    echo ERROR: Testing whether the build task fails as early as expected.
-    exit $ret_code; 
-fi
-
+# if [ $ret_code != 0 ]; then 
+#     echo ERROR: Testing whether the build task fails as early as expected.
+#     exit $ret_code; 
+# fi
 
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
