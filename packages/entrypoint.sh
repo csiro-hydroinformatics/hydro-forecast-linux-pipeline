@@ -1,5 +1,8 @@
 #!/bin/bash
 SWIFT_PAT=$1
+# The second argument is the name of the branch of the pipeline.
+# We use the matching branch of sf-stack. This is marginally useful now, but may 
+# be in the future for test builds
 BRANCH_NAME=$2
 
 echo from entrypoint.sh
