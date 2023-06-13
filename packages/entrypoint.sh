@@ -5,7 +5,15 @@ SWIFT_PAT=$1
 # be in the future for test builds
 BRANCH_NAME=$2
 
+# bitbucket personal access tokens can have forward slashes. 
+# And tend to. This considerably messes things up. 
+# This is a fallback in case there are "/" in the PAT to replace it with a URL compatible string:
+echo SWIFT_PAT=${SWIFT_PAT}
+SWIFT_PAT="${SWIFT_PAT//\//%2F}"
 echo from entrypoint.sh
+echo SWIFT_PAT=${SWIFT_PAT}
+
+
 # echo TEST_PAT=$TEST_PAT
 # echo TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
 
@@ -35,6 +43,7 @@ ret_code=0
 
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
+  && echo git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/sf-stack.git \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/sf-stack.git \
   && cd sf-stack \
   && git checkout ${BRANCH_NAME} || ret_code=1;
@@ -74,7 +83,8 @@ fi
 # Something appears to have changed in the dependencies of a CRAN package, perhaps DiagrammeR or dependency. 
 # Instead, using the snapshot kindly provided by Microsoft...
 
-export CRAN_REPOS="https://cran.microsoft.com/snapshot/2021-02-15"
+# 2023-06: https://cran.microsoft.com seems down or defunct.
+# export CRAN_REPOS="https://cran.microsoft.com/snapshot/2021-02-15"
 
 cd ${R_PKGS_DIR}
 if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then

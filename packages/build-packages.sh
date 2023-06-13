@@ -7,6 +7,11 @@ SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 # TEST_PAT=${TEST_PAT_ENV_VAR}
 BRANCH_NAME=${BRANCH_NAME_ENV_VAR}
 
+# bitbucket personal access tokens can have forward slashes. 
+# And tend to. This considerably messes things up. 
+# This is a fallback in case there are "/" in the PAT to replace it with a URL compatible string:
+SWIFT_PAT="${SWIFT_PAT//\//%2F}"
+
 OUT_ARTIFACT_PATH=$1  # $(Build.SourcesDirectory)/artifacts
 
 # echo from within build-packages.sh: TEST_PAT=${TEST_PAT} LOCAL_TEST_PAT_ENV_VAR=${LOCAL_TEST_PAT_ENV_VAR}

@@ -59,3 +59,26 @@ Other pipelines on the roadmap or wishlist:
 
 jean-michel.perraud@csiro.au
 david.robertson@csiro.au
+
+## Appendices
+
+### Testing the pipeline
+
+```sh
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+# CAUTION with below
+docker rmi --force $(docker images -q)
+```
+
+```sh
+cd ${HOME}/src/hydro-fc-packaging/packages
+root_out_dir=${HOME}/tmp/nix_pipeline
+mkdir -p ${root_out_dir}
+
+. ${HOME}/credentials/secrets/az_pat 
+export BRANCH_NAME_ENV_VAR=main
+
+./build-packages.sh ${root_out_dir}
+ls ${root_out_dir}
+```
