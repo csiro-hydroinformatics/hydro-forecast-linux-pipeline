@@ -8,10 +8,10 @@ BRANCH_NAME=$2
 # bitbucket personal access tokens can have forward slashes. 
 # And tend to. This considerably messes things up. 
 # This is a fallback in case there are "/" in the PAT to replace it with a URL compatible string:
-echo SWIFT_PAT=${SWIFT_PAT}
+# echo SWIFT_PAT=${SWIFT_PAT}
 SWIFT_PAT="${SWIFT_PAT//\//%2F}"
-echo from entrypoint.sh
-echo SWIFT_PAT=${SWIFT_PAT}
+# echo from entrypoint.sh
+# echo SWIFT_PAT=${SWIFT_PAT}
 
 
 # echo TEST_PAT=$TEST_PAT
@@ -43,7 +43,7 @@ ret_code=0
 
 mkdir -p ${CSIRO_BITBUCKET} \
   && cd ${CSIRO_BITBUCKET} \
-  && echo git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/sf-stack.git \
+  && echo cloning https://SOMETHING@bitbucket.csiro.au/scm/sf/sf-stack.git \
   && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/sf-stack.git \
   && cd sf-stack \
   && git checkout ${BRANCH_NAME} || ret_code=1;

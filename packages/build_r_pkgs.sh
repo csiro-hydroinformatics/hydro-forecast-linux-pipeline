@@ -98,7 +98,7 @@ cd ${CSIRO_BITBUCKET}/datatypes/bindings/R/pkgs
 _clean_possible_tarballs
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} uchronia
 if [ $? != 0 ]; then 
-    echo ERROR: R package uchronia cinterop failed
+    echo ERROR: R package uchronia failed
     exit $?; 
 fi
 ${R_VANILLA} CMD INSTALL uchronia_*.tar.gz

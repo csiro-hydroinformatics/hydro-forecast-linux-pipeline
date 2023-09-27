@@ -1,5 +1,6 @@
-FROM debian:bullseye-slim
+# FROM debian:bullseye-slim
 # FROM debian:bullseye-20220711-slim
+FROM ubuntu:22.04
 
 LABEL au.csiro.image.authors="per202@csiro.au"
 
@@ -84,5 +85,15 @@ RUN apt-get update && apt-get install -y \
   devscripts  \
   dh-cmake 
 
+
+# Ubuntu packaging seems to require some of these explicitely: 
+
+RUN apt-get install -y \
+  libtbb2 \
+  libnetcdf19 \
+  libyaml-cpp0.7 \
+  libyaml-0-2 
+
+RUN ls -l /usr/lib/x86_64-linux-gnu/libtbb*
 
 ENTRYPOINT ["./entrypoint.sh"]
