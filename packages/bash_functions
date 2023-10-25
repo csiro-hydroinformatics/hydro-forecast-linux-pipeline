@@ -1,0 +1,8 @@
+_exit_if_failed () {
+    _rc=$1
+    _title=$2
+    if [ ! $_rc == 0 ]; then
+        echo "FAILED ${_title} - EXITING PROCESS";
+        exit ${_rc};
+    fi
+}

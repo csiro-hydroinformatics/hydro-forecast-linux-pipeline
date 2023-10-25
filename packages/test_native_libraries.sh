@@ -2,9 +2,11 @@
 
 # Root of the source directory, where all the checked out repositories are
 SRC_ROOT=$1
+_exit=${2-0} # exit process if failed: 0 is false, anything else yes
 
-# NOTE: do I need to? effect on crafted error handling?
-# set -e  # Exit immediately if a command exits with a non-zero status.
+TEST_DATA_DIR=${HOME}/tmp/data # created by python step or earlier, now.
+export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
+export SWIFT_TEST_DIR=${TEST_DATA_DIR}/documentation
 
 INSTALL_PREFIX=/usr/local
 BUILD_CONFIG="Release"
@@ -99,7 +101,6 @@ _print_banner() {
 }
 
 
-_exit=0 # exit process if failed: 0 is false, anything else yes
 
 _print_banner MOIRAI
 _build_cmake ${GITHUB_REPOS}/moirai ${_exit}

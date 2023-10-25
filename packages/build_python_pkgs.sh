@@ -10,8 +10,9 @@ DEBUG_PY=0
 
 mkdir -p ${PY_PKGS_DIR}
 
-pip install wheel twine six pytest coverage
-pip install cffi xarray numpy pandas matplotlib jsonpickle
+# moved to be set up in base docker image to build from:
+# pip install wheel twine six pytest coverage
+# pip install cffi xarray numpy pandas matplotlib jsonpickle
 # seaborn?
 
 SUDOCMD=

@@ -36,7 +36,7 @@ _build_tarball () {
     FILES=$4
     if [ ! -e ${SRC} ]; then
         echo "FAILED: directory not found: $SRC";
-        exit 1;
+        exit 127;
     fi
     src_pkgname_ver=${src_pkgname}-${vernum}
     src_pkgname_orig_directory=${src_pkgname_ver}
@@ -77,6 +77,7 @@ _build_tarball () {
 
 _checked_build_tarball () {
     _build_tarball $1 $2 $3 "$4";
+    ret_code=$?
     if [ ! $? == 0 ]; then
         exit 1;
     else
