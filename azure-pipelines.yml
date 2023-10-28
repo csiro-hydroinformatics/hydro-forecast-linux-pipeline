@@ -30,6 +30,9 @@ stages:
     displayName: Build packages
     pool:
       vmImage: ubuntu-latest
+    container:
+      image: sfforecastingctnrregistry.azurecr.io/ubuntu-jammy-202310:20231025
+      endpoint: sfforecastingctnrregistry_connection
     steps:
     - checkout: self
     - task: Bash@3
@@ -39,13 +42,6 @@ stages:
         script: |
           echo Build.SourcesDirectory=$(Build.SourcesDirectory)
           ls $(Build.SourcesDirectory)
-    - task: Bash@3
-      displayName: 'Retrieve docker image'
-      inputs:
-        targetType: 'inline'
-        script: |
-          TAG="20231025"
-          docker pull docker-registry.it.csiro.au/hydrofc/ubuntu-jammy-202310:${TAG}
     - task: Bash@3
       displayName: 'Build debian and python packages'
       inputs:

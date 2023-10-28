@@ -16,6 +16,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ARG CURRENT_UID_ARG
 ENV CURRENT_UID=${CURRENT_UID_ARG}
 
+# Azure devops pipelines uses nodejs. It may bring its own though, so not sure whether installing it here is a good idea or not. Maybe BYO is fine. Let's see.
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops
+
 RUN apt-get update --yes && \
   apt-get install --yes --no-install-recommends \
   git \
@@ -26,6 +29,7 @@ RUN apt-get update --yes && \
   nano \
   p7zip-full \
   curl \
+  nodejs \
   libboost-system-dev \
   libboost-date-time-dev \
   libboost-regex-dev \

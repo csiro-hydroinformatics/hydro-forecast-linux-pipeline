@@ -1,6 +1,6 @@
 # Docker image for HYDROFC CI
 
-## Build the base ubuntu image
+## Getting our base image for CI
 
 An image is available on docker-registry.it.csiro.au from the [hydrofc/ubuntu-jammy-202310 project on the CSIRO Harbor server](https://docker-registry.it.csiro.au/harbor/projects/335/repositories/ubuntu-jammy-202310)
 
@@ -12,6 +12,16 @@ docker pull docker-registry.it.csiro.au/hydrofc/ubuntu-jammy-202310:${TAG}
 ```sh
 docker run docker-registry.it.csiro.au/hydrofc/ubuntu-jammy-202310:${TAG}
 ```
+
+## Housekeeping
+
+```sh
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker images | grep jammy
+```
+
+`docker rmi --force 0526885ade32 e0688f546f0c e4c58958181a` seems not to work. Trying `docker image prune -a` instead of `docker rmi --force` thinking this will let me remove some images and intermadiaries... but no, it nukes everything.
 
 ## Building
 
@@ -31,16 +41,30 @@ cd ${HOME}/src/hydro-fc-packaging/images
 docker build  \
   -f Dockerfile-jammy-base \
   --target ${TARGET}  \
+  --squash \
   --tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} ${EXTRA_ARGS}  \
   --progress=plain . 2>&1 | tee build-${IMAGE_NAME}.log
 ```
 
 ```sh
 docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} docker-registry.it.csiro.au/hydrofc/${IMAGE_NAME}:${TAG}
+docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 ```
 
 ```sh
 docker push docker-registry.it.csiro.au/hydrofc/${IMAGE_NAME}:${TAG}
+```
+
+And to push to the azure container:
+
+```sh
+. $HOME/credentials/secrets/az_pat
+az login
+
+az account set --subscription $SUBSCRIPTION_ID 
+az acr login --name sfforecastingctnrregistry
+
+docker push sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 ```
 
 ## Troubleshooting
