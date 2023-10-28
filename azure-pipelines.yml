@@ -32,7 +32,7 @@ stages:
       vmImage: ubuntu-latest
     container:
       image: sfforecastingctnrregistry.azurecr.io/ubuntu-jammy-202310:20231025
-      endpoint: sfforecastingctnrregistry_connection
+      endpoint: SfFcastDockerSrvConnection
     steps:
     - checkout: self
     - task: Bash@3
