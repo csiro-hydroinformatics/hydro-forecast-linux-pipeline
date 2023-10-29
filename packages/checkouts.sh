@@ -17,6 +17,12 @@ SWIFT_PAT="${SWIFT_PAT//\//%2F}"
 
 # set -e  # Exit immediately if a command exits with a non-zero status.
 
+echo whoami
+whoami
+echo HOME:
+echo $HOME
+
+
 SRC_ROOT=/src
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
