@@ -22,6 +22,7 @@ echo whoami
 whoami
 echo HOME:
 echo $HOME
+sudo ls
 
 umask 022 
 
@@ -110,7 +111,7 @@ TEST_DATA_DIR=${HOME}/tmp/data
 export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 
 cd ${GITHUB_REPOS}/config-utils \
-  && make install \
+  && sudo make install \
   || ret_code=1;
 
 
