@@ -30,9 +30,13 @@ stages:
     displayName: Build packages
     pool:
       vmImage: ubuntu-latest
-    container:
-      image: sfforecastingctnrregistry.azurecr.io/ubuntu-jammy-202310:20231025
-      endpoint: SfFcastDockerSrvConnection
+    #Cannnot get a service enpoint to work. 
+    #https://github.com/MicrosoftDocs/azure-devops-docs/issues/13741
+    #container:
+    #  image: sfforecastingctnrregistry.azurecr.io/ubuntu-jammy-202310:20231025
+    #  endpoint: SfFcastDockerSrvConnection
+    # So, just use dockerhub for now.
+    container: disparue/ubuntu-jammy-202310:20231025
     steps:
     - checkout: self
     - task: Bash@3
@@ -43,23 +47,37 @@ stages:
           echo Build.SourcesDirectory=$(Build.SourcesDirectory)
           ls $(Build.SourcesDirectory)
     - task: Bash@3
-      displayName: 'Build debian and python packages'
+      displayName: 'Prepare and build checkouts'
       inputs:
         targetType: 'inline'
         script: |
           cd $(Build.SourcesDirectory)/packages
           mkdir -p $(root_out_dir)
-          echo "ls $(root_out_dir)"
-          ls $(root_out_dir)
-          ./build-packages.sh $(root_out_dir)
-          echo "ls $(root_out_dir)"
-          ls $(root_out_dir)
+          ./checkouts.sh
         failOnStderr: false
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
         # failOnStderr: true
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
         BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
+    # - task: Bash@3
+    #   displayName: 'Build debian and python packages'
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       cd $(Build.SourcesDirectory)/packages
+    #       mkdir -p $(root_out_dir)
+    #       echo "ls $(root_out_dir)"
+    #       ls $(root_out_dir)
+    #       ./build-packages.sh $(root_out_dir)
+    #       echo "ls $(root_out_dir)"
+    #       ls $(root_out_dir)
+    #     failOnStderr: false
+    #     # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
+    #     # failOnStderr: true
+    #   env:
+    #     SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
+    #     BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
     # I could not locate an existing, or at least easy to use, point 
     # where we can check the "latest version" from the feed we populate with artifacts.
     # Let's create something small (not 100MB like the full installer) to be more nimble when
