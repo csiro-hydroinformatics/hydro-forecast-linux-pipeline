@@ -22,12 +22,13 @@ whoami
 echo HOME:
 echo $HOME
 
+umask 022 
 
 SRC_ROOT=${HOME}/src
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
 
-ROOT_BUILD_DIR=/tmp/build
+ROOT_BUILD_DIR=${HOME}/build
 DEB_PKGS_DIR=${ROOT_BUILD_DIR}/deb_pkgs
 mkdir -p ${DEB_PKGS_DIR}
 PY_PKGS_DIR=${ROOT_BUILD_DIR}/py_pkgs
@@ -114,4 +115,4 @@ cd ${GITHUB_REPOS}/config-utils \
 
 _exit_if_failed $ret_code "Failed to install config-utils"
 
-_exit_if_failed 244 "Failing on purpose to test new pipeline"
+_exit_if_failed 244 "Failing on purpose to incrementally build the reengineered pipeline"
