@@ -60,28 +60,73 @@ stages:
       env:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
         BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
-    # - task: Bash@3
-    #   displayName: 'Build debian and python packages'
-    #   inputs:
-    #     targetType: 'inline'
-    #     script: |
-    #       cd $(Build.SourcesDirectory)/packages
-    #       mkdir -p $(root_out_dir)
-    #       echo "ls $(root_out_dir)"
-    #       ls $(root_out_dir)
-    #       ./build-packages.sh $(root_out_dir)
-    #       echo "ls $(root_out_dir)"
-    #       ls $(root_out_dir)
-    #     failOnStderr: false
-    #     # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
-    #     # failOnStderr: true
-    #   env:
-    #     SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
-    #     BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
-    # I could not locate an existing, or at least easy to use, point 
-    # where we can check the "latest version" from the feed we populate with artifacts.
-    # Let's create something small (not 100MB like the full installer) to be more nimble when
-    # "just" checking for new versions 
+    - task: Bash@3
+      displayName: 'Build and install debian packages'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd $(Build.SourcesDirectory)/packages
+          chmod +x ./build_debian_pkgs.sh
+          SRC_ROOT=${HOME}/src
+          ROOT_BUILD_DIR=${HOME}/build
+          DEB_PKGS_DIR=${ROOT_BUILD_DIR}/deb_pkgs
+          DEB_BUILD_ROOT=${HOME}/debbuild
+          mkdir -p ${DEB_BUILD_ROOT}
+          ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEB_BUILD_ROOT}
+        failOnStderr: false
+        # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
+        # failOnStderr: true
+      env:
+        SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
+        BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
+    - task: Bash@3
+      displayName: 'Run C++ unit tests'
+      inputs:
+        targetType: 'inline'
+        script: |
+          chmod +x ./test_native_libraries.sh
+          SRC_ROOT=${HOME}/src
+          ./test_native_libraries.sh ${SRC_ROOT} 1
+        failOnStderr: false
+        # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
+        # failOnStderr: true
+      env:
+        SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
+        BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
+    - task: Bash@3
+      displayName: 'Build python packages'
+      inputs:
+        targetType: 'inline'
+        script: |
+          chmod +x ./build_python_pkgs.sh
+          SRC_ROOT=${HOME}/src
+          ROOT_BUILD_DIR=${HOME}/build
+          PY_PKGS_DIR=${ROOT_BUILD_DIR}/py_pkgs
+          mkdir -p ${PY_PKGS_DIR}
+          ./build_python_pkgs.sh ${PY_PKGS_DIR} ${SRC_ROOT}
+        failOnStderr: false
+        # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
+        # failOnStderr: true
+      env:
+        SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
+        BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
+    - task: Bash@3
+      displayName: 'Build R packages'
+      inputs:
+        targetType: 'inline'
+        script: |
+          chmod +x ./build_r_pkgs.sh
+          SRC_ROOT=${HOME}/src
+          ROOT_BUILD_DIR=${HOME}/build
+          R_PKGS_DIR=${ROOT_BUILD_DIR}/r_pkgs
+          mkdir -p ${R_PKGS_DIR}
+          ./build_r_pkgs.sh ${R_PKGS_DIR} ${SRC_ROOT}
+        failOnStderr: false
+        # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
+        # failOnStderr: true
+      env:
+        SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
+        BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
     - task: Bash@3
       displayName: 'Create small artifact with version'
       inputs:
@@ -131,27 +176,25 @@ stages:
     #    targetPath: '$(Pipeline.Workspace)'
     #    artifact: 'WaaInstaller'
     #    publishLocation: 'pipeline'
-
-    - task: UniversalPackages@0
-      displayName: Publish output bundle
-      inputs:
-        command: publish
-        publishDirectory: '$(Build.ArtifactStagingDirectory)/release'
-        vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
-        vstsFeedPackagePublish: 'swift_deb'
-        versionOption: custom
-        versionPublish: '$(Build.BuildNumber)'
-        packagePublishDescription: 'Debian packages for swift and co.'
-
-    - task: UniversalPackages@0
-      displayName: Publish output bundle version
-      inputs:
-        command: publish
-        publishDirectory: '$(Build.ArtifactStagingDirectory)/version'
-        vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
-        vstsFeedPackagePublish: 'swift_deb_version'
-        versionOption: custom
-        versionPublish: '$(Build.BuildNumber)'
-        packagePublishDescription: 'Version number for Debian packages for swift and co. bundle'
+    #- task: UniversalPackages@0
+    #  displayName: Publish output bundle
+    #  inputs:
+    #    command: publish
+    #    publishDirectory: '$(Build.ArtifactStagingDirectory)/release'
+    #    vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
+    #    vstsFeedPackagePublish: 'swift_deb'
+    #    versionOption: custom
+    #    versionPublish: '$(Build.BuildNumber)'
+    #    packagePublishDescription: 'Debian packages for swift and co.'
+    #- task: UniversalPackages@0
+    #  displayName: Publish output bundle version
+    #  inputs:
+    #    command: publish
+    #    publishDirectory: '$(Build.ArtifactStagingDirectory)/version'
+    #    vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
+    #    vstsFeedPackagePublish: 'swift_deb_version'
+    #    versionOption: custom
+    #    versionPublish: '$(Build.BuildNumber)'
+    #    packagePublishDescription: 'Version number for Debian packages for swift and co. bundle'
 
 
