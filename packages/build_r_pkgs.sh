@@ -44,7 +44,7 @@ mkdir -p ${ROOT_OUT_DIR}
 
 
 SUDOCMD=
-#SUDOCMD=sudo
+SUDOCMD=sudo
 
 R_REPO_DIR=${ROOT_OUT_DIR}/lib/R_repo
 R_SRC_REPO_PATH=${R_REPO_DIR}/src/contrib

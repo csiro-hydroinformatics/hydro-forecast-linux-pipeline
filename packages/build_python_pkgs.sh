@@ -16,7 +16,7 @@ mkdir -p ${PY_PKGS_DIR}
 # seaborn?
 
 SUDOCMD=
-#SUDOCMD=sudo
+SUDOCMD=sudo
 
 _build_py_pkg () {
     if [ ! -e ${PKG_SRC} ]; then
