@@ -21,8 +21,11 @@ mkdir -p ${DEB_PKGS_DIR}
 mkdir -p ${DEB_BUILD_ROOT}
 
 if [ ! -z ${SUDOCMD+x} ]; then
-    SUDOCMD=
+    SUDOCMD=sudo
 fi
+
+# Just force the dapn thing:
+SUDOCMD=sudo
 
 _clean_debbuild() {
     cd $SRC

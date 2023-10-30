@@ -90,8 +90,9 @@ fi
 ${R_VANILLA} CMD INSTALL msvs_*.tar.gz
 cp msvs_*.tar.gz ${R_SRC_REPO_PATH}/
 
-# TEST_DATA_DIR=${ROOT_OUT_DIR}/tmp/data
-TEST_DATA_DIR=${HOME}/tmp/data # created by python step or earlier, now.
+# Note: keep in sync with /src/hydro-fc-packaging/images/setup-deps.sh
+ROOT_DATA_DIR=/usr/local/share/data
+TEST_DATA_DIR=${ROOT_DATA_DIR}/swift
 export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 
 cd ${CSIRO_BITBUCKET}/datatypes/bindings/R/pkgs
