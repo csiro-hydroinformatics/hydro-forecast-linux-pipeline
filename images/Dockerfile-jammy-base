@@ -6,6 +6,8 @@ LABEL au.csiro.image.authors="jean-michel.perraud@csiro.au"
 LABEL maintainer="J-M <jean-michel.perraud@csiro.au>"
 LABEL product="Ubuntu Jammy image used for CI pipeline for streamflow forecasting"
 LABEL version="0.1"
+# Tell the agent about Node.js
+LABEL "com.azure.dev.pipelines.agent.handler.node.path"="/usr/bin/node"
 
 USER root
 
@@ -19,6 +21,8 @@ ENV CURRENT_UID=${CURRENT_UID_ARG}
 # Azure devops pipelines uses nodejs. It may bring its own though, so not sure whether installing it here is a good idea or not. Maybe BYO is fine. Let's see.
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops
 
+# readline-common and co, to sudo may be needed?: see https://learn.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops
+
 RUN apt-get update --yes && \
   apt-get install --yes --no-install-recommends \
   git \
@@ -30,6 +34,9 @@ RUN apt-get update --yes && \
   p7zip-full \
   curl \
   nodejs \
+  adduser \
+  readline-common \
+  sudo \
   libboost-system-dev \
   libboost-date-time-dev \
   libboost-regex-dev \
@@ -42,14 +49,17 @@ RUN apt-get update --yes && \
   libeigen3-dev \
   libyaml-cpp-dev \
   libjsoncpp-dev \
+  r-cran-rcpp \
   r-cran-knitr \
   r-cran-lubridate \
   r-cran-zoo \
   r-cran-xts \
   r-cran-ggplot2 \
-  r-cran-dplyr \
-  r-cran-mvtnorm \
   r-cran-plyr \
+  r-cran-dplyr \
+  r-cran-rmarkdown \
+  r-cran-readr \
+  r-cran-mvtnorm \
   r-cran-ncdf4 \
   r-cran-udunits2 \
   r-cran-igraph \
@@ -81,12 +91,14 @@ RUN apt-get update --yes && \
   build-essential \
   dh-cmake 
 
+
 # Ubuntu packaging seems to require some of these explicitely: 
 RUN apt-get install -y \
   libtbb2 \
   libnetcdf19 \
   libyaml-cpp0.7 \
   libyaml-0-2 
+
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -96,3 +108,7 @@ COPY setup_dependent_packages.r /baseimage
 COPY setup-deps.sh /baseimage
 
 RUN ./setup-deps.sh
+
+# following CMD infered from an example. May or may be not required
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/process/container-phases?view=azure-devops#full-example-of-a-dockerfile
+CMD [ "node" ]

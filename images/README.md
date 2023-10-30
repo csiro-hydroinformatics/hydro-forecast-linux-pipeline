@@ -67,6 +67,24 @@ az acr login --name sfforecastingctnrregistry
 docker push sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 ```
 
+## docker
+
+```sh
+docker login -u disparue
+
+
+TAG="20231025"
+TARGET=ubuntu-jammy-202310
+DOCKER_REPOSITORY=hydrofc
+IMAGE_NAME=ubuntu-jammy-202310
+EXTRA_ARGS=""
+
+docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} disparue/${IMAGE_NAME}:${TAG}
+
+docker push disparue/${IMAGE_NAME}:${TAG}
+
+```
+
 ## Troubleshooting
 
 ```text
