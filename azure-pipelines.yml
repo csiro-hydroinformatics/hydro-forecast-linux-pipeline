@@ -167,6 +167,15 @@ stages:
         contents: '*.*'
         targetFolder: '$(Build.ArtifactStagingDirectory)/version'
 
+    - task: Bash@3
+      displayName: 'TEMPORARY - check outputs'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd $(Build.ArtifactStagingDirectory)/release
+          ls -lR
+        failOnStderr: false
+
     # Note that the MS azure doc seems to advocate using the PublishPipelineArtifact task.
     # However this was too abstract to me, without a useful examplar to start from
     # Instead, using UniversalPackages which worked out OK
