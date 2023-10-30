@@ -110,6 +110,12 @@ TEST_DATA_DIR=${HOME}/tmp/data
 # mkdir -p ${TEST_DATA_DIR}
 export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 
+# This script is run by AZDO under the user `vsts_azpcontainer`
+# It seems however to be configured such that it can sudo without password
+# I came across the following issue, which seems relevent, though am not across it fully, far from it.
+# Anyway, `sudo make install` seems to work which is all I care
+# https://github.com/microsoft/azure-pipelines-agent/issues/2043
+
 cd ${GITHUB_REPOS}/config-utils \
   && sudo make install \
   || ret_code=1;
@@ -117,4 +123,4 @@ cd ${GITHUB_REPOS}/config-utils \
 
 _exit_if_failed $ret_code "Failed to install config-utils"
 
-_exit_if_failed 244 "Failing on purpose to incrementally build the reengineered pipeline"
+# _exit_if_failed 244 "Failing on purpose to incrementally build the reengineered pipeline"
