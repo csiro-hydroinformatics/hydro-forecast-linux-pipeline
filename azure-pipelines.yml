@@ -84,6 +84,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          cd $(Build.SourcesDirectory)/packages
           chmod +x ./test_native_libraries.sh
           SRC_ROOT=${HOME}/src
           ./test_native_libraries.sh ${SRC_ROOT} 1
@@ -98,6 +99,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          cd $(Build.SourcesDirectory)/packages
           chmod +x ./build_python_pkgs.sh
           SRC_ROOT=${HOME}/src
           ROOT_BUILD_DIR=${HOME}/build
@@ -115,6 +117,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          cd $(Build.SourcesDirectory)/packages
           chmod +x ./build_r_pkgs.sh
           SRC_ROOT=${HOME}/src
           ROOT_BUILD_DIR=${HOME}/build
