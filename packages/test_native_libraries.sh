@@ -13,9 +13,10 @@ cd ${TEST_DATA_DIR}
 if [ ! -e swift_test_data.7z ]; then
     sudo curl -o swift_test_data.7z https://cloudstor.aarnet.edu.au/plus/s/RU6kLfzuncINu4f/download
 fi
-sudo CHECK default root umask:
+sudo echo CHECK default root umask:
 sudo umask
 sudo 7z x -y swift_test_data.7z 
+sudo chmod -R go+rx data 
 
 export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 export SWIFT_TEST_DIR=${TEST_DATA_DIR}/documentation
