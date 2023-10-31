@@ -16,7 +16,7 @@ fi
 sudo echo CHECK default root umask:
 sudo umask
 sudo 7z x -y swift_test_data.7z 
-sudo chmod -R go+rx data 
+sudo chmod -R go+rx ./* 
 
 export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 export SWIFT_TEST_DIR=${TEST_DATA_DIR}/documentation
