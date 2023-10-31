@@ -130,6 +130,10 @@ _build_cmake ${CSIRO_BITBUCKET}/datatypes/tests/api ${_exit}
 
 _run_cli_unit_test ${CSIRO_BITBUCKET}/datatypes/tests/api/build datatypes_tests_api ${_exit}
 ###########
+
+# two cores on the MS hosted AZdevops build agents SFAIK
+export SWIFT_UT_MAX_THREAD_LEVELS=2 
+
 _print_banner SWIFT
 _build_cmake ${CSIRO_BITBUCKET}/swift/tests/testlibswift ${_exit}
 _run_cli_unit_test ${CSIRO_BITBUCKET}/swift/tests/testlibswift/build testswift ${_exit}
