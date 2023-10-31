@@ -39,13 +39,19 @@ pip install cffi xarray numpy pandas matplotlib jsonpickle
 
 ret_code=0
 
-TEST_DATA_DIR=${ROOT_DATA_DIR}/swift
-mkdir -p ${TEST_DATA_DIR}
+git lfs install
 
-cd ${TEST_DATA_DIR}
-if [ ! -e swift_test_data.7z ]; then
-    curl -o swift_test_data.7z https://cloudstor.aarnet.edu.au/plus/s/RU6kLfzuncINu4f/download
-    # do not unzip to keep the image smaller
-    # 7z x -y swift_test_data.7z 
-fi
+mkdir -p ${ROOT_DATA_DIR}
+# TODO: version the test data in sf-stack repo
+# in which case it may be a better idea to clone this repo in the pipeline run
+# https://stackoverflow.com/a/45385463/2752565
+# if [[ -v "foo[bar]" ]] ; then
+#   echo "foo[bar] is set"
+# fi
+
+ret_code=0;
+cd ${ROOT_DATA_DIR} \
+  && git clone https://github.com/csiro-hydroinformatics/sf-test-data.git \
+  || ret_code=1;
+
 

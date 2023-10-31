@@ -98,11 +98,6 @@ for f in ${reponames_gh[@]} ; do
   _exit_if_failed $ret_code "Failed to clone repository ${f}"
 done
 
-TEST_DATA_DIR=${HOME}/tmp/data
-# NOTE: moved test data download to base image
-# mkdir -p ${TEST_DATA_DIR}
-export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
-
 cd ${GITHUB_REPOS}/config-utils \
   && make install \
   || ret_code=1;

@@ -26,6 +26,10 @@ sudo ls
 
 umask 022 
 
+# git lfs install
+
+. globals
+
 SRC_ROOT=${HOME}/src
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
@@ -104,11 +108,6 @@ for f in ${reponames_gh[@]} ; do
 
   _exit_if_failed $ret_code "Failed to clone repository ${f}"
 done
-
-TEST_DATA_DIR=${HOME}/tmp/data
-# NOTE: moved test data download to base image
-# mkdir -p ${TEST_DATA_DIR}
-export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
 
 # This script is run by AZDO under the user `vsts_azpcontainer`
 # It seems however to be configured such that it can sudo without password

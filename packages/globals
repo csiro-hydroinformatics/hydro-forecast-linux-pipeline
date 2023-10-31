@@ -1,0 +1,10 @@
+
+# Note: keep in sync with /src/hydro-fc-packaging/images/setup-deps.sh
+
+export ROOT_DATA_DIR=/usr/local/share/data
+export TEST_DATA_DIR=${ROOT_DATA_DIR}/swift
+export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
+export SWIFT_TEST_DIR=${TEST_DATA_DIR}/documentation
+export QPP_TEST_DIR=${SWIFT_TEST_DIR}
+export CHYPP_TEST_DIR=${ROOT_DATA_DIR}/chypp/TestData
+

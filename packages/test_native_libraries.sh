@@ -7,19 +7,9 @@ _exit=${2-0} # exit process if failed: 0 is false, anything else yes
 . bash_functions
 
 # Note: keep in sync with /src/hydro-fc-packaging/images/setup-deps.sh
-ROOT_DATA_DIR=/usr/local/share/data
-TEST_DATA_DIR=${ROOT_DATA_DIR}/swift
-cd ${TEST_DATA_DIR}
-if [ ! -e swift_test_data.7z ]; then
-    sudo curl -o swift_test_data.7z https://cloudstor.aarnet.edu.au/plus/s/RU6kLfzuncINu4f/download
-fi
-sudo echo CHECK default root umask:
-sudo umask
-sudo 7z x -y swift_test_data.7z 
-sudo chmod -R go+rx ./* 
+. globals
 
-export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
-export SWIFT_TEST_DIR=${TEST_DATA_DIR}/documentation
+sudo ./unzip_testdata.sh
 
 INSTALL_PREFIX=/usr/local
 BUILD_CONFIG="Release"

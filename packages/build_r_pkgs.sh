@@ -90,10 +90,7 @@ fi
 ${R_VANILLA} CMD INSTALL msvs_*.tar.gz
 cp msvs_*.tar.gz ${R_SRC_REPO_PATH}/
 
-# Note: keep in sync with /src/hydro-fc-packaging/images/setup-deps.sh
-ROOT_DATA_DIR=/usr/local/share/data
-TEST_DATA_DIR=${ROOT_DATA_DIR}/swift
-export SWIFT_SAMPLE_DATA_DIR=${TEST_DATA_DIR}/documentation
+. globals
 
 cd ${CSIRO_BITBUCKET}/datatypes/bindings/R/pkgs
 _clean_possible_tarballs
