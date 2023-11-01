@@ -1,0 +1,79 @@
+FROM hydrofc/ubuntu-jammy-202310:20231025 as fs-pipeline-202310
+
+# docker run \
+  #  --name hfc_pipeline \
+  #  -d \
+  #  -v $PWD:/data \
+  #  -u $(id -u) \
+  #  myimage
+
+LABEL au.csiro.image.authors="jean-michel.perraud@csiro.au"
+LABEL maintainer="J-M <jean-michel.perraud@csiro.au>"
+LABEL product="Test pipeline on custom image"
+LABEL version="0.1"
+
+ARG SWIFT_PAT_ARG=someuser:blahPATblah
+
+USER root
+
+RUN useradd -ms /bin/bash janedoe 
+RUN usermod -aG sudo janedoe 
+# New added for disable sudo password
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+
+USER janedoe 
+
+WORKDIR /home/janedoe/pipesrc/packages
+
+COPY ./packages/checkouts.sh /home/janedoe/pipesrc/packages/
+COPY ./packages/build_debian_pkgs.sh /home/janedoe/pipesrc/packages/
+COPY ./packages/bash_functions /home/janedoe/pipesrc/packages/
+COPY ./packages/globals /home/janedoe/pipesrc/packages/
+COPY ./packages/test_native_libraries.sh /home/janedoe/pipesrc/packages/
+COPY ./packages/build_python_pkgs.sh /home/janedoe/pipesrc/packages/
+COPY ./packages/build_r_pkgs.sh /home/janedoe/pipesrc/packages/
+
+WORKDIR /home/janedoe 
+
+ENV SWIFT_PAT_ENV_VAR=$SWIFT_PAT_ARG
+ENV BRANCH_NAME_ENV_VAR=testing
+ENV SRC_ROOT=/home/janedoe/src
+ENV ROOT_BUILD_DIR=/home/janedoe/build
+ENV DEB_PKGS_DIR=/home/janedoe/build/deb_pkgs
+ENV DEB_BUILD_ROOT=/home/janedoe/debbuild
+ENV root_out_dir=/home/janedoe/built
+ENV PY_PKGS_DIR=/home/janedoe/build/py_pkgs
+ENV R_PKGS_DIR=/home/janedoe/build/r_pkgs
+ENV PIPE_SRC=/home/janedoe/pipesrc
+
+RUN mkdir -p ${DEB_BUILD_ROOT} \
+  && mkdir -p $root_out_dir \
+  && mkdir -p ${PY_PKGS_DIR} \
+  && mkdir -p ${R_PKGS_DIR}
+
+RUN cd ${PIPE_SRC}/packages \
+  && echo  'checkout sources' \
+  && echo  PDW=$PWD \
+  && ls \
+  && ./checkouts.sh
+RUN echo  'Build and install debian packages' \
+  && cd ${PIPE_SRC}/packages \
+  && ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEB_BUILD_ROOT}
+
+WORKDIR /home/janedoe/pipesrc/packages
+
+COPY ./packages/unzip_testdata.sh /home/janedoe/pipesrc/packages/
+
+WORKDIR /home/janedoe 
+
+RUN echo  'Run C++ unit tests' \
+  && cd ${PIPE_SRC}/packages \
+  && ./test_native_libraries.sh ${SRC_ROOT} 1
+RUN echo  'Build python packages' \
+  && cd ${PIPE_SRC}/packages \
+  && ./build_python_pkgs.sh ${PY_PKGS_DIR} ${SRC_ROOT}
+RUN echo  'Build R packages' \
+  && cd ${PIPE_SRC}/packages \
+  && ./build_r_pkgs.sh ${R_PKGS_DIR} ${SRC_ROOT}
+
