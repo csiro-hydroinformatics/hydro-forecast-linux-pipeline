@@ -21,4 +21,12 @@ docker build  \
   --build-arg SWIFT_PAT_ARG="${SWIFT_PAT_ENV_VAR}" \
   --tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} ${EXTRA_ARGS}  \
   --progress=plain . 2>&1 | tee build-${IMAGE_NAME}.log
+
+  docker build  \
+  -f Dockerfile-pipeline \
+  --no-cache \
+  --target ${TARGET}  \
+  --build-arg SWIFT_PAT_ARG="${SWIFT_PAT_ENV_VAR}" \
+  --tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} ${EXTRA_ARGS}  \
+  --progress=plain . 2>&1 | tee build-${IMAGE_NAME}.log
 ```

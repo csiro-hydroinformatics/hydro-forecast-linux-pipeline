@@ -19,14 +19,17 @@ CXX_COMP=-DCMAKE_CXX_COMPILER=g++
 C_COMP=-DCMAKE_C_COMPILER=gcc
 CM="cmake ${CXX_COMP} ${C_COMP} ${CM_PREF} ${CM_GCOV} -DBUILD_SHARED_LIBS=ON .."
 # The command below is machine dependent in practice. TODO Adjust depending on how many of your logical cores want to to use.
-MAKE_CMD="make -j 2"
+
+if [ -z ${MAKE_CMD+x} ]; then 
+    MAKE_CMD="make -j 2"
+fi
 
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
 
 # SUDO_CMD=""
 CLEAN_BUILD="rm -rf ../build/*"
-
+# No need. 
 CLEAN_BUILD=""
 
 _build_cmake () {
@@ -145,6 +148,7 @@ _run_cli_unit_test ${CSIRO_BITBUCKET}/qpp/testlibqpp/build testqpp ${_exit}
 _print_banner CHYPP
 
 export CHYPP_TEST_DIR=${HOME}/data/chypp/TestData
+ls ${CHYPP_TEST_DIR}
 _build_cmake ${CSIRO_BITBUCKET}/chypp/tests/TestCHyPP ${_exit}
 _run_cli_unit_test ${CSIRO_BITBUCKET}/chypp/tests/TestCHyPP/build testchypp ${_exit}
 
