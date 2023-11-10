@@ -1,4 +1,14 @@
 
+# Testing the pipeline using a custom image
+
+This readme has instructions to reproduce running some of the steps for the build pipeline on a local desktop, to speed up iterative development.
+
+```sh
+TAG="20231025"
+TAG=20231110
+docker pull docker-registry.it.csiro.au/hydrofc/ubuntu-jammy-202310:${TAG}
+docker tag docker-registry.it.csiro.au/hydrofc/ubuntu-jammy-202310:${TAG} hydrofc/ubuntu-jammy-202310:${TAG}
+```
 
 ```sh
 TARGET=fs-pipeline-202310
@@ -22,7 +32,8 @@ docker build  \
   --tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} ${EXTRA_ARGS}  \
   --progress=plain . 2>&1 | tee build-${IMAGE_NAME}.log
 
-  docker build  \
+# OR
+docker build  \
   -f Dockerfile-pipeline \
   --no-cache \
   --target ${TARGET}  \

@@ -17,3 +17,8 @@ chmod -R go+rx *
 cd ${ROOT_DATA_DIR}/chypp/
 7z x chypp_test_data.7z 
 chmod -R go+rx *
+
+if [ ! -e ${CHYPP_TEST_DIR} ]
+then
+  echo ERROR CHyPP test data directory not found ${CHYPP_TEST_DIR}
+fi

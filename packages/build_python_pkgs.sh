@@ -8,6 +8,8 @@ SRC_ROOT=$2
 
 DEBUG_PY=0
 
+. globals
+
 mkdir -p ${PY_PKGS_DIR}
 
 # moved to be set up in base docker image to build from:

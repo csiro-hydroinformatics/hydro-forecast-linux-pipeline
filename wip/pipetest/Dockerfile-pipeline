@@ -1,4 +1,5 @@
-FROM hydrofc/ubuntu-jammy-202310:20231025 as fs-pipeline-202310
+# FROM hydrofc/ubuntu-jammy-202310:20231025 as fs-pipeline-202310
+FROM hydrofc/ubuntu-jammy-202310:20231110 as fs-pipeline-202310
 
 # docker run \
   #  --name hfc_pipeline \

@@ -15,16 +15,23 @@ SRC_ROOT=$2
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
 
+. globals
+
+ret_code=$?
+if [ $ret_code != 0 ]; then 
+    echo FAILED to import globals
+    exit $ret_code; 
+fi
 
 DEBUG_R=0
 
 mkdir -p ${ROOT_OUT_DIR}
 
-# # Make sure there is a user Renviron to avoid risks of read-only clash (although theoretical with Docker/jovyan) 
-# if [ ! -e $HOME/.Renviron ]; then
-#     mkdir -p ${HOME}/R/local
-#     echo "R_LIBS=${HOME}/R/local" > $HOME/.Renviron 
-# fi
+# Make sure there is a user Renviron to avoid risks of read-only clash (although theoretical with Docker/jovyan) 
+if [ ! -e $HOME/.Renviron ]; then
+    mkdir -p ${HOME}/R/local
+    echo "R_LIBS=${HOME}/R/local" > $HOME/.Renviron 
+fi
 
 # cd ${ROOT_OUT_DIR}
 # if [ ! -e ${SRC_ROOT}/cruise-control/scripts/setup_dependent_packages.r ]; then
@@ -89,8 +96,6 @@ if [ $? != 0 ]; then
 fi
 ${R_VANILLA} CMD INSTALL msvs_*.tar.gz
 cp msvs_*.tar.gz ${R_SRC_REPO_PATH}/
-
-. globals
 
 cd ${CSIRO_BITBUCKET}/datatypes/bindings/R/pkgs
 _clean_possible_tarballs

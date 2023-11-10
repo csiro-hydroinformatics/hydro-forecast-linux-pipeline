@@ -48,7 +48,6 @@ docker build  \
 
 ```sh
 docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} docker-registry.it.csiro.au/hydrofc/${IMAGE_NAME}:${TAG}
-docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 ```
 
 ```sh
@@ -71,6 +70,7 @@ docker push sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 
 ```sh
 TAG="20231025"
+TAG="20231110"
 TARGET=ubuntu-jammy-202310
 DOCKER_REPOSITORY=hydrofc
 IMAGE_NAME=ubuntu-jammy-202310
@@ -78,7 +78,8 @@ EXTRA_ARGS=""
 
 docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} disparue/${IMAGE_NAME}:${TAG}
 
-docker login -u disparue
+docker login -u disparue 
+# Check vault; entry for  gmail address for some reasons
 docker push disparue/${IMAGE_NAME}:${TAG}
 
 ```
