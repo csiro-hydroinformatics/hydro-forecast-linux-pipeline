@@ -33,10 +33,10 @@ stages:
     #Cannnot get a service enpoint to work. 
     #https://github.com/MicrosoftDocs/azure-devops-docs/issues/13741
     #container:
-    #  image: sfforecastingctnrregistry.azurecr.io/ubuntu-jammy-202310:20231025
+    #  image: sfforecastingctnrregistry.azurecr.io/ubuntu-jammy-202310:20231110
     #  endpoint: SfFcastDockerSrvConnection
     # So, just use dockerhub for now.
-    container: disparue/ubuntu-jammy-202310:20231025
+    container: disparue/ubuntu-jammy-202310:20231110
     steps:
     - checkout: self
     - task: Bash@3
@@ -47,13 +47,28 @@ stages:
           echo Build.SourcesDirectory=$(Build.SourcesDirectory)
           ls $(Build.SourcesDirectory)
     - task: Bash@3
-      displayName: 'Prepare and build checkouts'
+      displayName: 'Clone and checkout codebases'
       inputs:
         targetType: 'inline'
         script: |
           cd $(Build.SourcesDirectory)/packages
           mkdir -p $(root_out_dir)
           ./checkouts.sh
+        failOnStderr: false
+        # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
+        # failOnStderr: true
+      env:
+        SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
+        BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
+    - task: Bash@3
+      displayName: 'Unzip test/doc data'
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd $(Build.SourcesDirectory)/packages
+          echo /usr/local/share/data:
+          ls /usr/local/share/data
+          sudo ./unzip_testdata.sh
         failOnStderr: false
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
         # failOnStderr: true

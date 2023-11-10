@@ -9,10 +9,11 @@ _exit=${2-0} # exit process if failed: 0 is false, anything else yes
 # Note: keep in sync with /src/hydro-fc-packaging/images/setup-deps.sh
 . globals
 
-echo INFO: about to unzip the test data
-sudo ./unzip_testdata.sh
-ret_code=$?
-_exit_if_failed $ret_code "Failed to unzip unit test data"
+# Now done from the pipeline:
+# echo INFO: about to unzip the test data
+# sudo ./unzip_testdata.sh
+# ret_code=$?
+# _exit_if_failed $ret_code "Failed to unzip unit test data"
 
 
 INSTALL_PREFIX=/usr/local
