@@ -9,7 +9,11 @@ _exit=${2-0} # exit process if failed: 0 is false, anything else yes
 # Note: keep in sync with /src/hydro-fc-packaging/images/setup-deps.sh
 . globals
 
+echo INFO: about to unzip the test data
 sudo ./unzip_testdata.sh
+ret_code=$?
+_exit_if_failed $ret_code "Failed to unzip unit test data"
+
 
 INSTALL_PREFIX=/usr/local
 BUILD_CONFIG="Release"
@@ -31,72 +35,6 @@ GITHUB_REPOS=${SRC_ROOT}
 CLEAN_BUILD="rm -rf ../build/*"
 # No need. 
 CLEAN_BUILD=""
-
-_build_cmake () {
-    src_dir=$1
-    _eif=${2-0}
-    ret_code=0
-    if [ ! -e ${src_dir} ]; then
-        echo "FAILED: directory not found: ${src_dir}";
-        ret_code=127;
-    else
-        cd ${src_dir} && \
-        mkdir -p ${src_dir}/build \
-        && cd ${src_dir}/build \
-        && ${CLEAN_BUILD} \
-        && ${CM} \
-        && ${MAKE_CMD} \
-        || ret_code=1;
-
-        if [ $ret_code == 0 ]; then
-            echo "OK: built $src_dir";
-        else
-            echo "FAILED building: $src_dir";
-        fi
-    fi
-    if [ $_eif != 0 ]; then
-        _exit_if_failed $ret_code "compilation of ${src_dir}"
-    fi
-    return $ret_code
-}
-
-_run_cli_unit_test () {
-    build_dir=$1
-    exe_name=$2
-    _eif=${3-0} # exit if failed
-    _rc=0
-    if [ ! -e ${build_dir} ]; then
-        echo "FAILED: directory not found: ${build_dir}";
-        _rc=127;
-    else
-        cd ${build_dir};
-        if [ ! -e ${exe_name} ]; then
-            echo "FAILED: file ${exe_name} not found in ${build_dir}";
-            _rc=127;
-        else
-            ./${exe_name}
-            ret_code=$?
-            if [ $ret_code != 0 ]; then 
-                echo FAILED: unit test ${exe_name} return code is not 0 but $ret_code
-                _rc=$ret_code;
-            fi
-        fi
-    fi
-    if [ $_eif != 0 ]; then
-        _exit_if_failed $_rc "unit tests ${exe_name}"
-    fi
-    return $_rc
-}
-
-_print_banner() {
-    echo
-    echo "==============================================="
-    echo $1
-    echo "==============================================="
-    echo
-}
-
-
 
 _print_banner MOIRAI
 _build_cmake ${GITHUB_REPOS}/moirai ${_exit}

@@ -1,11 +1,19 @@
 #!/bin/bash
 
-. globals
 umask 022
 
+. bash_functions
+. globals
+
+echo entering ${ROOT_DATA_DIR}
 cd ${ROOT_DATA_DIR}
+ret_code=$?
+_exit_if_failed $ret_code "Failed to change dir to ${ROOT_DATA_DIR}"
+
 # sf-test-data.git
 ls sf-test-data/
+ret_code=$?
+_exit_if_failed $ret_code "Failed: sf-test-data not found under ${ROOT_DATA_DIR}"
 mkdir -p ${ROOT_DATA_DIR}/swift
 mkdir -p ${ROOT_DATA_DIR}/chypp
 mv sf-test-data/swift_test_data.7z swift/

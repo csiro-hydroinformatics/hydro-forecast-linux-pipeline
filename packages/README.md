@@ -25,7 +25,7 @@ BUILD_TAG=`date --iso-8601`
 root_out_dir=${HOME}/tmp/hfc_ci
 mkdir -p $root_out_dir
 . ${HOME}/credentials/secrets/az_pat 
-export BRANCH_NAME_ENV_VAR=main
+export BRANCH_NAME_ENV_VAR=testing
 
 ./build-packages.sh ${root_out_dir}  2>&1 | tee build-ci-${BUILD_TAG}.log
 ```
