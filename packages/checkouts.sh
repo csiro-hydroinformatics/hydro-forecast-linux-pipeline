@@ -2,6 +2,7 @@
 SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 # TEST_PAT=${TEST_PAT_ENV_VAR}
 BRANCH_NAME=${BRANCH_NAME_ENV_VAR}
+# BRANCH_NAME="testing"
 
 # bitbucket personal access tokens can have forward slashes. 
 # And tend to. This considerably messes things up. 
@@ -11,7 +12,6 @@ SWIFT_PAT="${SWIFT_PAT//\//%2F}"
 # echo from entrypoint.sh
 # echo SWIFT_PAT=${SWIFT_PAT}
 
-BRANCH_NAME="testing"
 
 # echo TEST_PAT=$TEST_PAT
 # echo TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
