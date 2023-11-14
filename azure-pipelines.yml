@@ -207,11 +207,15 @@ stages:
         targetFolder: '$(Build.ArtifactStagingDirectory)/version'
 
     - task: Bash@3
-      displayName: 'TEMPORARY - check outputs'
+      displayName: 'Check output with built packages'
       inputs:
         targetType: 'inline'
         script: |
-          cd $(Build.ArtifactStagingDirectory)/release
+          OUT_DIR=$(Build.ArtifactStagingDirectory)/release
+          if [ -z "$(ls -A ${OUT_DIR})" ]; then
+            echo "FAILED: package output directory ${OUT_DIR} appears to be empty"
+            exit 1
+          cd ${OUT_DIR}
           ls -lR
         failOnStderr: false
 
@@ -219,30 +223,30 @@ stages:
     # However this was too abstract to me, without a useful examplar to start from
     # Instead, using UniversalPackages which worked out OK
 
-    #- task: PublishPipelineArtifact@1
-    #  inputs:
-    #    targetPath: '$(Pipeline.Workspace)'
-    #    artifact: 'WaaInstaller'
-    #    publishLocation: 'pipeline'
-    #- task: UniversalPackages@0
-    #  displayName: Publish output bundle
-    #  inputs:
-    #    command: publish
-    #    publishDirectory: '$(Build.ArtifactStagingDirectory)/release'
-    #    vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
-    #    vstsFeedPackagePublish: 'swift_deb'
-    #    versionOption: custom
-    #    versionPublish: '$(Build.BuildNumber)'
-    #    packagePublishDescription: 'Debian packages for swift and co.'
-    #- task: UniversalPackages@0
-    #  displayName: Publish output bundle version
-    #  inputs:
-    #    command: publish
-    #    publishDirectory: '$(Build.ArtifactStagingDirectory)/version'
-    #    vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
-    #    vstsFeedPackagePublish: 'swift_deb_version'
-    #    versionOption: custom
-    #    versionPublish: '$(Build.BuildNumber)'
-    #    packagePublishDescription: 'Version number for Debian packages for swift and co. bundle'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'WaaInstaller'
+        publishLocation: 'pipeline'
+    - task: UniversalPackages@0
+      displayName: Publish output bundle
+      inputs:
+        command: publish
+        publishDirectory: '$(Build.ArtifactStagingDirectory)/release'
+        vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
+        vstsFeedPackagePublish: 'swift_deb'
+        versionOption: custom
+        versionPublish: '$(Build.BuildNumber)'
+        packagePublishDescription: 'Debian packages for swift and co.'
+    - task: UniversalPackages@0
+      displayName: Publish output bundle version
+      inputs:
+        command: publish
+        publishDirectory: '$(Build.ArtifactStagingDirectory)/version'
+        vstsFeedPublish: 'OD222236-DigWaterAndLandscapes/hydro_forecast_deb'
+        vstsFeedPackagePublish: 'swift_deb_version'
+        versionOption: custom
+        versionPublish: '$(Build.BuildNumber)'
+        packagePublishDescription: 'Version number for Debian packages for swift and co. bundle'
 
 
