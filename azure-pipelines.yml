@@ -13,9 +13,6 @@ variables:
   # use pipeline_src_dir to facilitate testing out of Azure Pipeline
   pipeline_src_dir: $(Build.SourcesDirectory)
   root_out_dir: $(Build.BinariesDirectory)/outputs
-  deb_out_dir: $(Build.BinariesDirectory)/outputs/deb
-  py_out_dir: $(Build.BinariesDirectory)/outputs/py
-  r_out_dir: $(Build.BinariesDirectory)/outputs/r
 
 # to get a custom '$(Build.BuildNumber)', and 'r' is a counter reset to 1 every change of the major/minor versions
 # TODO: reference to this technique on the web?
@@ -53,6 +50,7 @@ stages:
         script: |
           cd $(Build.SourcesDirectory)/packages
           mkdir -p $(root_out_dir)
+          chmod go+rw $(root_out_dir)
           ./checkouts.sh
         failOnStderr: false
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
@@ -84,10 +82,19 @@ stages:
           chmod +x ./build_debian_pkgs.sh
           SRC_ROOT=${HOME}/src
           ROOT_BUILD_DIR=${HOME}/build
-          DEB_PKGS_DIR=${ROOT_BUILD_DIR}/deb_pkgs
+          DEB_PKGS_DIR=$(root_out_dir)/deb_pkgs
+          mkdir -p ${DEB_PKGS_DIR}
           DEB_BUILD_ROOT=${HOME}/debbuild
           mkdir -p ${DEB_BUILD_ROOT}
+          export SUDOCMD=sudo
           ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEB_BUILD_ROOT}
+          if [ -z "$(ls -A ${DEB_PKGS_DIR})" ]; then
+            echo "FAILED: package output directory ${DEB_PKGS_DIR} appears to be empty"
+            exit 1
+          else
+            echo "Output in ${DEB_PKGS_DIR}"
+            ls ${DEB_PKGS_DIR}
+          fi
         failOnStderr: false
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
         # failOnStderr: true
@@ -118,9 +125,16 @@ stages:
           chmod +x ./build_python_pkgs.sh
           SRC_ROOT=${HOME}/src
           ROOT_BUILD_DIR=${HOME}/build
-          PY_PKGS_DIR=${ROOT_BUILD_DIR}/py_pkgs
+          PY_PKGS_DIR=$(root_out_dir)/py_pkgs
           mkdir -p ${PY_PKGS_DIR}
           ./build_python_pkgs.sh ${PY_PKGS_DIR} ${SRC_ROOT}
+          if [ -z "$(ls -A ${PY_PKGS_DIR})" ]; then
+            echo "FAILED: package output directory ${PY_PKGS_DIR} appears to be empty"
+            exit 1
+          else
+            echo "Output in ${PY_PKGS_DIR}"
+            ls ${PY_PKGS_DIR}
+          fi
         failOnStderr: false
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
         # failOnStderr: true
@@ -136,9 +150,16 @@ stages:
           chmod +x ./build_r_pkgs.sh
           SRC_ROOT=${HOME}/src
           ROOT_BUILD_DIR=${HOME}/build
-          R_PKGS_DIR=${ROOT_BUILD_DIR}/r_pkgs
+          R_PKGS_DIR=$(root_out_dir)/r_pkgs
           mkdir -p ${R_PKGS_DIR}
           ./build_r_pkgs.sh ${R_PKGS_DIR} ${SRC_ROOT}
+          if [ -z "$(ls -A ${R_PKGS_DIR})" ]; then
+            echo "FAILED: package output directory ${R_PKGS_DIR} appears to be empty"
+            exit 1
+          else
+            echo "Output in ${R_PKGS_DIR}"
+            ls ${R_PKGS_DIR}
+          fi
         failOnStderr: false
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
         # failOnStderr: true

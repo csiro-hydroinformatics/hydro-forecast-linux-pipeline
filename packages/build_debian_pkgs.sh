@@ -24,9 +24,6 @@ if [ ! -z ${SUDOCMD+x} ]; then
     SUDOCMD=sudo
 fi
 
-# Just force the dapn thing:
-SUDOCMD=sudo
-
 _clean_debbuild() {
     cd $SRC
     rm -rf ${DEB_BUILD_PKG}/*
@@ -232,3 +229,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
+echo "==================================================="
+echo "Output directory for debian packages is ${DEB_PKGS_DIR}"
+echo "contains"
+ls ${DEB_PKGS_DIR}
+echo "==================================================="

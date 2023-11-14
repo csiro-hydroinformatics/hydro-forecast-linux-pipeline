@@ -65,8 +65,8 @@ mkdir -p ${CSIRO_BITBUCKET} \
 
 _exit_if_failed $ret_code "Failed to checkout sf-stack"
 
-source ${CSIRO_BITBUCKET}/sf-stack/reponames.sh
-source ${CSIRO_BITBUCKET}/sf-stack/hashsums
+. ${CSIRO_BITBUCKET}/sf-stack/reponames.sh
+. ${CSIRO_BITBUCKET}/sf-stack/hashsums
 
 echo Testing whether reposha has the expected SHA for c-c: ${reposha["cruise-control"]}
 
