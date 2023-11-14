@@ -229,6 +229,7 @@ stages:
           if [ -z "$(ls -A ${OUT_DIR})" ]; then
             echo "FAILED: package output directory ${OUT_DIR} appears to be empty"
             exit 1
+          fi
           cd ${OUT_DIR}
           ls -lR
         failOnStderr: false
