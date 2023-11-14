@@ -167,6 +167,20 @@ stages:
         SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
         BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
     - task: Bash@3
+      displayName: 'Code provenance information'
+      inputs:
+        targetType: 'inline'
+        script: |
+          prov_file=$(root_out_dir)/provenance.md
+          touch ${prov_file}
+          SRC_ROOT=${HOME}/src
+          CSIRO_BITBUCKET=${SRC_ROOT}
+          cd ${CSIRO_BITBUCKET}/sf-stack
+          echo "# Source code provenance information" >> ${prov_file}
+          echo "" >> ${prov_file}
+          git log -n 1 >> ${prov_file}
+        failOnStderr: false
+    - task: Bash@3
       displayName: 'Create small artifact with version'
       inputs:
         targetType: 'inline'
