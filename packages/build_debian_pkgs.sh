@@ -102,10 +102,12 @@ _install_deb() {
 
 
 src_pkgname=moirai
-vernum=1.1
 SRC=${SRC_ROOT}/moirai
 FILES="CMakeLists.txt cmake_uninstall.cmake.in src include debian/ doc/ tests moirai.pc.in README.md"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
+#TODO for each package:
+# vernum=`echo ${deb_version} | awk -F'[-]' '{print $1;}'`
+vernum=1.1
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 

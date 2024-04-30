@@ -23,7 +23,7 @@ docker images | grep jammy
 
 `docker rmi --force 0526885ade32 e0688f546f0c e4c58958181a` seems not to work. Trying `docker image prune -a` instead of `docker rmi --force` thinking this will let me remove some images and intermadiaries... but no, it nukes everything.
 
-## Building
+## Building a custom image
 
 ```sh
 TARGET=ubuntu-jammy-202310
@@ -66,7 +66,7 @@ az acr login --name sfforecastingctnrregistry
 docker push sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 ```
 
-## docker
+## dockerhub
 
 ```sh
 TAG="20231025"
