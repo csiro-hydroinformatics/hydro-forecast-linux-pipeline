@@ -3,6 +3,9 @@
 ROOT_OUT_DIR=$1
 SRC_ROOT=$2
 
+# https://mariadb.com/kb/en/operating-system-error-codes/
+_ENOENT=2
+
 #####  
 ## TESTS
 # ROOT_OUT_DIR=$HOME/tmp/test_artifacts/
@@ -70,48 +73,72 @@ _clean_possible_tarballs () {
     fi
 }
 
+# First, let us check we have the sample data file installed. Otherwise no point.
+cd ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/
+
+if [ ! -e swift_sample_data.rda ]; then
+    # curl -o swift_sample_data.rda https://cloudstor.aarnet.edu.au/plus/s/vfIbwcISy8jKQmg/download
+    if [ ! -e ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda ]; then
+        echo ERROR: 'swift_sample_data.rda' not found, and not found either in ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda 
+        exit ${_ENOENT}; 
+    fi
+    cp ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda ./
+fi
+
 
 cd ${GITHUB_REPOS}/c-interop/bindings/R/pkgs
 ${R_VANILLA} -e "library(roxygen2) ; roxygenize('cinterop')"
 ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/c-interop/bindings/R/pkgs/cinterop')"
 _clean_possible_tarballs
 ${R_VANILLA} CMD build cinterop
-if [ $? != 0 ]; then 
+ret_code=$?
+if [ $ret_code != 0 ]; then 
     echo ERROR: R package build cinterop failed
-    exit $?; 
+    exit $ret_code; 
 fi
 
 # May need, if building vignettes in uchronia and co
 # ${R_VANILLA} CMD INSTALL cinterop_
 cp cinterop_*.tar.gz ${R_SRC_REPO_PATH}/
 ${R_VANILLA} CMD INSTALL cinterop_*.tar.gz
+ret_code=$?
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Installing R package cinterop failed
+    exit $ret_code; 
+fi
 cd ${GITHUB_REPOS}/config-utils/R/packages
 ${R_VANILLA} -e "roxygen2::roxygenize('msvs')"
 # ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/config-utils/R/packages/msvs')"
 _clean_possible_tarballs
 ${R_VANILLA} CMD build msvs
-if [ $? != 0 ]; then 
+ret_code=$?
+if [ $ret_code != 0 ]; then 
     echo ERROR: R package build msvs failed
-    exit $?; 
+    exit $ret_code; 
 fi
 ${R_VANILLA} CMD INSTALL msvs_*.tar.gz
+ret_code=$?
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Installing R package msvs failed
+    exit $ret_code; 
+fi
 cp msvs_*.tar.gz ${R_SRC_REPO_PATH}/
 
 cd ${CSIRO_BITBUCKET}/datatypes/bindings/R/pkgs
 _clean_possible_tarballs
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} uchronia
-if [ $? != 0 ]; then 
+ret_code=$?
+if [ $ret_code != 0 ]; then 
     echo ERROR: R package uchronia failed
-    exit $?; 
+    exit $ret_code; 
 fi
 ${R_VANILLA} CMD INSTALL uchronia_*.tar.gz
-cp uchronia_*.tar.gz ${R_SRC_REPO_PATH}/
-
-cd ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/
-
-if [ ! -e swift_sample_data.rda ]; then
-    curl -o swift_sample_data.rda https://cloudstor.aarnet.edu.au/plus/s/vfIbwcISy8jKQmg/download
+ret_code=$?
+if [ $ret_code != 0 ]; then 
+    echo ERROR: Installing R package uchronia failed
+    exit $ret_code; 
 fi
+cp uchronia_*.tar.gz ${R_SRC_REPO_PATH}/
 
 cd ${GITHUB_REPOS}/
 # git clone git@github.com:csiro-hydroinformatics/mhplot.git
@@ -132,16 +159,23 @@ cd ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs
 
 Rscript -e "required <- c('calibragem') ; already <- installed.packages()[,1] ; missingPkgs <- required[ !(required %in% already)] ; if(length(missingPkgs) > 0) {  quit(save = 'no', status = 1, runLast = TRUE) }"
 
-if [ $? != 0 ]; then
+ret_code=$?
+if [ $ret_code != 0 ]; then
   # echo "INFO building 'calibragem' first before swift vignettes"; 
   ${R_VANILLA} CMD build --no-build-vignettes swift
-  if [ $? != 0 ]; then 
-      echo ERROR: R package build swift failed
-      exit $?; 
+  ret_code=$?
+  if [ $ret_code != 0 ]; then 
+      echo "ERROR: R package build swift (without vignettes) failed"
+      exit $ret_code; 
   fi
 
   ${R_VANILLA} CMD INSTALL swift_*.tar.gz
   ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} calibragem
+  ret_code=$?
+  if [ $ret_code != 0 ]; then 
+      echo ERROR: R package build calibragem failed
+      exit $ret_code; 
+  fi
   ${R_VANILLA} CMD INSTALL calibragem_*.tar.gz
   cp calibragem_*.tar.gz ${R_SRC_REPO_PATH}/
 fi
@@ -149,9 +183,10 @@ fi
 ########################
 
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} swift
-if [ $? != 0 ]; then 
+ret_code=$?
+if [ $ret_code != 0 ]; then 
     echo ERROR: R package build swift failed
-    exit $?; 
+    exit $ret_code; 
 fi
 ${R_VANILLA} CMD INSTALL swift_*.tar.gz
 cp swift_*.tar.gz ${R_SRC_REPO_PATH}/
@@ -160,9 +195,10 @@ cd ${GITHUB_REPOS}/
 _clean_possible_tarballs
 ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/efts')"
 ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} efts
-if [ $? != 0 ]; then 
+ret_code=$?
+if [ $ret_code != 0 ]; then 
     echo ERROR: R package build efts failed
-    exit $?; 
+    exit $ret_code; 
 fi
 cp efts_*.tar.gz ${R_SRC_REPO_PATH}/
 
@@ -172,5 +208,9 @@ ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} qpp
 ${R_VANILLA} CMD INSTALL qpp_*.tar.gz
 cp qpp_*.tar.gz ${R_SRC_REPO_PATH}/
 
-
 Rscript -e "library(tools) ; write_PACKAGES(dir='${R_SRC_REPO_PATH}/', type='source')"
+ret_code=$?
+if [ $ret_code != 0 ]; then 
+    echo ERROR: R write_PACKAGES failed
+    exit $ret_code; 
+fi
