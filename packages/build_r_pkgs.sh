@@ -73,19 +73,6 @@ _clean_possible_tarballs () {
     fi
 }
 
-# First, let us check we have the sample data file installed. Otherwise no point.
-cd ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/
-
-if [ ! -e swift_sample_data.rda ]; then
-    # curl -o swift_sample_data.rda https://cloudstor.aarnet.edu.au/plus/s/vfIbwcISy8jKQmg/download
-    if [ ! -e ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda ]; then
-        echo ERROR: 'swift_sample_data.rda' not found, and not found either in ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda 
-        exit ${_ENOENT}; 
-    fi
-    cp ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda ./
-fi
-
-
 cd ${GITHUB_REPOS}/c-interop/bindings/R/pkgs
 ${R_VANILLA} -e "library(roxygen2) ; roxygenize('cinterop')"
 ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/c-interop/bindings/R/pkgs/cinterop')"
