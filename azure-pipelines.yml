@@ -66,6 +66,7 @@ stages:
           cd $(Build.SourcesDirectory)/packages
           echo /usr/local/share/data:
           ls /usr/local/share/data
+          SRC_ROOT=${HOME}/src
           sudo ./unzip_testdata.sh ${SRC_ROOT}
         failOnStderr: false
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 

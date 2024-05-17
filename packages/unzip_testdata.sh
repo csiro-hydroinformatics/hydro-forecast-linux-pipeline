@@ -4,6 +4,9 @@ SRC_ROOT=$1
 CSIRO_BITBUCKET=${SRC_ROOT}
 GITHUB_REPOS=${SRC_ROOT}
 
+# https://mariadb.com/kb/en/operating-system-error-codes/
+_ENOENT=2
+
 umask 022
 
 . bash_functions
@@ -33,6 +36,10 @@ cd ${ROOT_DATA_DIR}/chypp/
 chmod -R go+rx *
 
 # First, let us check we have the sample data file installed. Otherwise no point.
+if [ ! -e ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/ ]; then
+    echo ERROR: ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/ not found
+    exit ${_ENOENT}; 
+fi
 cd ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/
 
 if [ ! -e swift_sample_data.rda ]; then
