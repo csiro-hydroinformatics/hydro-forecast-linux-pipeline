@@ -26,13 +26,13 @@ mkdir -p ${ROOT_DATA_DIR}/chypp
 mv sf-test-data/swift_test_data.7z swift/
 mv sf-test-data/chypp_test_data.7z chypp/
 # First, let us check we have the sample data file installed. Otherwise no point.
-# The data is present on the base image we use for the pipeline, not checked out live by the pipeline to save time.
+# The data is present on the base image we use for the pipeline, not checked out live by the pipeline to save runtime.
 if [ ! -e ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/ ]; then
     echo ERROR: ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/ not found
     exit ${_ENOENT}; 
 fi
-if [ ! -e ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda ]; then
-    echo ERROR: 'swift_sample_data.rda' not found, expected ${GITHUB_REPOS}/sf-test-data/swift_sample_data.rda 
+if [ ! -e ${ROOT_DATA_DIR}/sf-test-data/swift_sample_data.rda ]; then
+    echo ERROR: 'swift_sample_data.rda' not found, expected ${ROOT_DATA_DIR}/sf-test-data/swift_sample_data.rda 
     exit ${_ENOENT}; 
 fi
 mv sf-test-data/swift_sample_data.rda ${CSIRO_BITBUCKET}/swift/bindings/R/pkgs/swift/data/
