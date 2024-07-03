@@ -50,11 +50,14 @@ docker build  \
 docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} docker-registry.it.csiro.au/hydrofc/${IMAGE_NAME}:${TAG}
 ```
 
+
 ```sh
+docker login docker-registry.it.csiro.au
+# Note: if server down may have: Login did not succeed, error: Error response from daemon: Get "https://docker-registry.it.csiro.au/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
 docker push docker-registry.it.csiro.au/hydrofc/${IMAGE_NAME}:${TAG}
 ```
 
-And to push to the azure container:
+And to push to the azure container: (deprecated??)
 
 ```sh
 . $HOME/credentials/secrets/az_pat
