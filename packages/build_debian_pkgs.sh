@@ -180,7 +180,7 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=swift
-vernum=2.4
+vernum=2.5
 SRC=${SRC_ROOT}/swift/libswift
 FILES="CMakeLists.txt cmake_uninstall.cmake.in workarounds.h *.cpp debian tests swift.pc.in include/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`

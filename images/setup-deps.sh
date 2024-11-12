@@ -39,7 +39,8 @@ pip install cffi xarray numpy pandas matplotlib jsonpickle
 
 ret_code=0
 
-git lfs install
+# Jul 24 suspending or deprecating the use of github lfs. Requires ongoing fee, may make things brittle.
+# git lfs install
 
 mkdir -p ${ROOT_DATA_DIR}
 # TODO: version the test data in sf-stack repo
@@ -49,9 +50,10 @@ mkdir -p ${ROOT_DATA_DIR}
 #   echo "foo[bar] is set"
 # fi
 
-ret_code=0;
-cd ${ROOT_DATA_DIR} \
-  && git clone https://github.com/csiro-hydroinformatics/sf-test-data.git \
-  || ret_code=1;
+# Jul 24 suspending or deprecating the use of github lfs. Requires ongoing fee, may make things brittle.
+# ret_code=0;
+# cd ${ROOT_DATA_DIR} \
+#   && git clone https://github.com/csiro-hydroinformatics/sf-test-data.git \
+#   || ret_code=1;
 
 
