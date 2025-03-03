@@ -67,10 +67,10 @@ _run_cli_unit_test ${CSIRO_BITBUCKET}/datatypes/tests/api/build datatypes_tests_
 export SWIFT_UT_MAX_THREAD_LEVELS=2 
 
 _print_banner SWIFT
-echo DIASABLING TEMPORARILY TO BE ABLE TO RUN A WORKSHOP FOR WNSW
 _build_cmake ${CSIRO_BITBUCKET}/swift/tests/testlibswift ${_exit}
-# _run_cli_unit_test ${CSIRO_BITBUCKET}/swift/tests/testlibswift/build testswift ${_exit}
+_run_cli_unit_test ${CSIRO_BITBUCKET}/swift/tests/testlibswift/build testswift ${_exit}
 
+# echo DIASABLING TEMPORARILY TO BE ABLE TO RUN A WORKSHOP FOR WNSW
 _build_cmake ${CSIRO_BITBUCKET}/swift/tests/api ${_exit}
 # _run_cli_unit_test ${CSIRO_BITBUCKET}/swift/tests/api/build testswiftapi ${_exit}
 

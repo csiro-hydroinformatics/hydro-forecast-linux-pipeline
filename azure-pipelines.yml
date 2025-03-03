@@ -33,7 +33,8 @@ stages:
     #  image: sfforecastingctnrregistry.azurecr.io/ubuntu-jammy-202310:20231110
     #  endpoint: SfFcastDockerSrvConnection
     # So, just use dockerhub for now.
-    container: disparue/ubuntu-jammy-202310:20240517
+    # container: disparue/ubuntu-jammy-202310:20240517
+    container: disparue/ubuntu-jammy-202501:20250303
     steps:
     - checkout: self
     - task: Bash@3

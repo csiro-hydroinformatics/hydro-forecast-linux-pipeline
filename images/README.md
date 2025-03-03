@@ -26,20 +26,28 @@ docker images | grep jammy
 ## Building a custom image
 
 ```sh
-TARGET=ubuntu-jammy-202310
+# TARGET=ubuntu-jammy-202310
+# March 25, scipy-notebook is now based on noble
+# https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile
+# so this is what we should built our tools for, as is most likely to run on this.
+TARGET=ubuntu-noble-202501
+# TARGET=ubuntu-jammy-202501
+IMAGE_NAME=${TARGET}
 DOCKER_REPOSITORY=hydrofc
-IMAGE_NAME=ubuntu-jammy-202310
 TAG=`date +%Y%m%d`
 EXTRA_ARGS=""
+# DOCKER_FN=Dockerfile-jammy-base
+DOCKER_FN=Dockerfile-noble-base
 
 # to clean up:
 # docker rmi --force ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG}
 
 # can use --no-cache:
 # EXTRA_ARGS="--no-cache"
+
 cd ${HOME}/src/hydro-fc-packaging/images
 docker build  \
-  -f Dockerfile-jammy-base \
+  -f ${DOCKER_FN} \
   --target ${TARGET}  \
   --squash \
   --tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} ${EXTRA_ARGS}  \
@@ -72,11 +80,17 @@ docker push sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 ## dockerhub
 
 ```sh
-TAG="20231025"
-TAG="20231110"
-TARGET=ubuntu-jammy-202310
+# TAG="20231025"
+# TAG="20231110"
+# TARGET=ubuntu-jammy-202310
+# DOCKER_REPOSITORY=hydrofc
+# IMAGE_NAME=ubuntu-jammy-202310
+# EXTRA_ARGS=""
+
+TAG="20250303"
+TARGET=ubuntu-jammy-202501
 DOCKER_REPOSITORY=hydrofc
-IMAGE_NAME=ubuntu-jammy-202310
+IMAGE_NAME=ubuntu-jammy-202501
 EXTRA_ARGS=""
 
 docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} disparue/${IMAGE_NAME}:${TAG}
