@@ -61,7 +61,8 @@ R_SRC_REPO_PATH=${R_REPO_DIR}/src/contrib
 mkdir -p $R_SRC_REPO_PATH
 
 # March 2025 try to get past an issue on the pipeline agent (ubuntu latest) not reproducible on Linux Debian.
-RCMD_BUILD_OPT= --no-build-vignettes
+# RCMD_BUILD_OPT= --no-build-vignettes
+RCMD_BUILD_OPT=
 
 R_EXE=R
 R_VANILLA="${R_EXE} --no-save --no-restore-data"
