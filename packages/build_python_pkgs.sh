@@ -69,6 +69,8 @@ mkdir -p ${PKG_SRC}/dist/
 cd ${PKG_SRC}/dist/
 pip download --no-deps refcount
 ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
+echo "OK: copying python wheel to ${PY_PKGS_DIR}";
+cp ${PKG_SRC}/dist/*.whl ${PY_PKGS_DIR}/
 
 #########################################################
 
