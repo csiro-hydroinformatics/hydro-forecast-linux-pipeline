@@ -55,15 +55,19 @@ pip_option=""
 SRC=${SRC_ROOT}/pyrefcount
 PKG_SRC=${SRC}
 
-_build_py_pkg
+# July 2025, _build_py_pkg assumes a setup.py. No more.:
+# _build_py_pkg
 
-if [ ! $? == 0 ]; then
-    exit 1;
-else
-    echo "OK: copying python wheel to ${PY_PKGS_DIR}";
-    cp ${PKG_SRC}/dist/*.whl ${PY_PKGS_DIR}/
-fi
-
+# if [ ! $? == 0 ]; then
+#     exit 1;
+# else
+#     echo "OK: copying python wheel to ${PY_PKGS_DIR}";
+#     cp ${PKG_SRC}/dist/*.whl ${PY_PKGS_DIR}/
+# fi
+# July 2025, time to use pypi as the reference for this package:
+mkdir -p ${PKG_SRC}/dist/
+cd ${PKG_SRC}/dist/
+pip download --no-deps refcount
 ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
 #########################################################
