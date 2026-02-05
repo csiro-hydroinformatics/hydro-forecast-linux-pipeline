@@ -180,16 +180,17 @@ fi
 ${R_VANILLA} CMD INSTALL swift_*.tar.gz
 cp swift_*.tar.gz ${R_SRC_REPO_PATH}/
 
-cd ${GITHUB_REPOS}/
-_clean_possible_tarballs
-${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/efts')"
-${R_VANILLA} CMD build ${RCMD_BUILD_OPT} efts
-ret_code=$?
-if [ $ret_code != 0 ]; then 
-    echo ERROR: R package build efts failed
-    exit $ret_code; 
-fi
-cp efts_*.tar.gz ${R_SRC_REPO_PATH}/
+# deprecate efts R pkg due to clash with new efts python.
+# cd ${GITHUB_REPOS}/
+# _clean_possible_tarballs
+# ${R_VANILLA} -e "devtools::test(pkg='${GITHUB_REPOS}/efts')"
+# ${R_VANILLA} CMD build ${RCMD_BUILD_OPT} efts
+# ret_code=$?
+# if [ $ret_code != 0 ]; then 
+#     echo ERROR: R package build efts failed
+#     exit $ret_code; 
+# fi
+# cp efts_*.tar.gz ${R_SRC_REPO_PATH}/
 
 
 cd ${CSIRO_BITBUCKET}/qpp/bindings/R/pkgs

@@ -55,14 +55,15 @@ mkdir -p ${GITHUB_REPOS} \
   && cd wila \
   && git checkout testing \
   && cd .. \
-  && git clone https://github.com/csiro-hydroinformatics/efts.git \
-  && cd efts \
-  && git checkout master \
-  && cd .. \
   && git clone https://github.com/csiro-hydroinformatics/mhplot.git \
   && cd mhplot \
   && git checkout master \
   && cd ..
+  # deprecate efts R pkg due to clash with new efts python.
+  # && git clone https://github.com/csiro-hydroinformatics/efts.git \
+  # && cd efts \
+  # && git checkout master \
+  # && cd .. \
 
 cd ${GITHUB_REPOS}/config-utils \
   && make install
