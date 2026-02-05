@@ -7,6 +7,7 @@ SRC_ROOT=$2
 # temporary, working directory where pkgs are built
 DEB_BUILD_ROOT=$3
 
+# # testing locally:
 # DEB_PKGS_DIR=${HOME}/tmp/debs
 # SRC_ROOT=${HOME}/src
 # DEB_BUILD_ROOT=${HOME}/tmp/debbuild
@@ -98,9 +99,9 @@ _get_upstream_version() {
     # Consider reviewint to have patch as well once I revise the handling
     # of debian packages, which I may also start to offer via github enterprise.
     # Extract major.minor (remove patch version if present)
-    local major_minor=$(echo "$upstream_version" | sed 's/^\([0-9]*\.[0-9]*\).*/\1/')
+    # local major_minor=$(echo "$upstream_version" | sed 's/^\([0-9]*\.[0-9]*\).*/\1/')
     
-    echo "$major_minor"
+    echo "$upstream_version"
 }
 
 _checked_build_tarball () {
@@ -128,7 +129,6 @@ _install_deb() {
 
 #########################################################
 
-
 src_pkgname=moirai
 SRC=${SRC_ROOT}/moirai
 FILES="CMakeLists.txt cmake_uninstall.cmake.in src include debian/ doc/ tests moirai.pc.in README.md"
@@ -136,7 +136,8 @@ deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog
 #TODO for each package:
 # vernum=`echo ${deb_version} | awk -F'[-]' '{print $1;}'`
 vernum=$(_get_upstream_version "${SRC}/debian/changelog")
-
+# echo deb_version=$deb_version
+# echo vernum=$vernum
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
 _install_deb lib${src_pkgname} $deb_version
