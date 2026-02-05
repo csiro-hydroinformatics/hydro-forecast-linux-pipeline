@@ -44,6 +44,11 @@ stages:
         script: |
           echo Build.SourcesDirectory=$(Build.SourcesDirectory)
           ls $(Build.SourcesDirectory)
+    - script: |
+        echo "DEBUG: checking out the branch of the pipeline actually checked out"
+        git branch --show-current
+        git rev-parse HEAD
+      displayName: 'Verify current branch and commit'
     - task: Bash@3
       displayName: 'Clone and checkout codebases'
       inputs:
