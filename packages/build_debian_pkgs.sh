@@ -75,6 +75,34 @@ _build_tarball () {
     fi
 }
 
+_get_upstream_version() {
+    local changelog_path=$1
+    if [ ! -f "$changelog_path" ]; then
+        echo "ERROR: Changelog file not found: $changelog_path" >&2
+        return 1
+    fi
+    
+    # Read first line, extract version between parentheses, remove debian revision
+    local full_version=$(head -n 1 "$changelog_path" | sed -n 's/^[^(]*(\([^)]*\)).*$/\1/p')
+    
+    if [ -z "$full_version" ]; then
+        echo "ERROR: Could not parse version from changelog" >&2
+        return 1
+    fi
+    
+    # Remove debian revision (last hyphen and everything after)
+    local upstream_version=$(echo "$full_version" | sed 's/-[^-]*$//')
+    
+    # I keep the prior hard coded behavior using major.minor. 
+    # I am not sure why this was that way tbh.
+    # Consider reviewint to have patch as well once I revise the handling
+    # of debian packages, which I may also start to offer via github enterprise.
+    # Extract major.minor (remove patch version if present)
+    local major_minor=$(echo "$upstream_version" | sed 's/^\([0-9]*\.[0-9]*\).*/\1/')
+    
+    echo "$major_minor"
+}
+
 _checked_build_tarball () {
     _build_tarball $1 $2 $3 "$4";
     ret_code=$?
@@ -107,7 +135,7 @@ FILES="CMakeLists.txt cmake_uninstall.cmake.in src include debian/ doc/ tests mo
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 #TODO for each package:
 # vernum=`echo ${deb_version} | awk -F'[-]' '{print $1;}'`
-vernum=1.1
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
@@ -117,10 +145,10 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=cinterop
-vernum=1.1
 SRC=${SRC_ROOT}/c-interop
 FILES="cinterop.pc.in CMakeLists.txt cmake_uninstall.cmake.in debian/ doc/ include/ LICENSE.txt README.md"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 
 _checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
 
@@ -131,8 +159,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=boost-threadpool
-vernum=0.2
 SRC=${SRC_ROOT}/threadpool
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="boost  boost-thread.pc.in  CHANGE_LOG  COPYING  debian  docs  Jamfile.v2  Jamrules  libs  LICENSE_1_0.txt  Makefile  project-root.jam  README  TODO"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
@@ -143,8 +171,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=wila
-vernum=0.7
 SRC=${SRC_ROOT}/wila
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="CMakeLists.txt  cmake_uninstall.cmake.in  debian/  doc/  FindTBB.cmake  include/  LICENSE  README.md  tests/  wila.kdev4  wila.pc.in wila.props.in"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
@@ -155,8 +183,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=sfsl
-vernum=2.3
 SRC=${SRC_ROOT}/numerical-sl-cpp
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="algorithm  CMakeLists.txt  cmake_uninstall.cmake.in  debian math  README.md  sfsl.pc.in test"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
@@ -167,8 +195,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=uchronia
-vernum=2.4
 SRC=${SRC_ROOT}/datatypes/datatypes
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="CMakeLists.txt cmake_uninstall.cmake.in include src debian lib_paths.props.in tests uchronia.pc.in version.cmake"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
@@ -180,8 +208,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=swift
-vernum=2.5
 SRC=${SRC_ROOT}/swift/libswift
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="CMakeLists.txt cmake_uninstall.cmake.in workarounds.h *.cpp debian tests swift.pc.in include/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
@@ -193,8 +221,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=qppcore
-vernum=2.3
 SRC=${SRC_ROOT}/qpp/libqppcore
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qppcore.pc.in include/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
@@ -206,8 +234,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=qpp
-vernum=2.4
 SRC=${SRC_ROOT}/qpp/libqpp
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="CMakeLists.txt cmake_uninstall.cmake.in *.cpp debian qpp.pc.in include/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
@@ -219,8 +247,8 @@ _install_deb lib${src_pkgname}-dev $deb_version
 #########################################################
 
 src_pkgname=chypp
-vernum=2.1
 SRC=${SRC_ROOT}/chypp/CHyPP
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
 FILES="chypp.pc.in CMakeLists.txt cmake_uninstall.cmake.in debian/ include/ src/"
 deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
 
