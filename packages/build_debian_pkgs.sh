@@ -260,6 +260,18 @@ _install_deb lib${src_pkgname}-dev $deb_version
 
 #########################################################
 
+src_pkgname=chypp-cli
+SRC=${SRC_ROOT}/chypp/applications/CHyPPapp
+vernum=$(_get_upstream_version "${SRC}/debian/changelog")
+FILES="CMakeLists.txt cmake_uninstall.cmake.in debian/ *.cpp *.h"
+deb_version=`dpkg-parsechangelog --show-field Version -l ${SRC}/debian/changelog`
+
+_checked_build_tarball $src_pkgname $vernum $SRC "$FILES"
+
+_install_deb ${src_pkgname} $deb_version
+
+#########################################################
+
 echo "==================================================="
 echo "Output directory for debian packages is ${DEB_PKGS_DIR}"
 echo "contains"
