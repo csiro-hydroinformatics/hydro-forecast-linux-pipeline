@@ -1,0 +1,190 @@
+# Builds hydrologic forecast packages (Debian, Python, R)
+# Migrated from Azure DevOps pipeline
+
+name: Build Packages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Manual trigger
+
+env:
+  BUILD_VERSION: "0.2.${{ github.run_number }}"
+
+jobs:
+  build:
+    name: Build packages
+    runs-on: ubuntu-latest
+    container:
+      image: disparue/ubuntu-jammy-202501:20250303
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Where are repos checked out
+        run: |
+          echo "GITHUB_WORKSPACE=${GITHUB_WORKSPACE}"
+          ls ${GITHUB_WORKSPACE}
+
+      - name: Verify current branch and commit
+        run: |
+          echo "DEBUG: checking out the branch of the pipeline actually checked out"
+          git config --global --add safe.directory ${GITHUB_WORKSPACE}
+          git branch --show-current
+          git rev-parse HEAD
+
+      - name: Clone and checkout codebases
+        working-directory: ${{ github.workspace }}/packages
+        env:
+          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
+          BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
+        run: |
+          mkdir -p ${RUNNER_TEMP}/outputs
+          chmod go+rw ${RUNNER_TEMP}/outputs
+          ./checkouts.sh
+
+      - name: Unzip test/doc data
+        working-directory: ${{ github.workspace }}/packages
+        env:
+          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
+          BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
+        run: |
+          echo /usr/local/share/data:
+          ls /usr/local/share/data
+          SRC_ROOT=${HOME}/src
+          sudo ./unzip_testdata.sh ${SRC_ROOT}
+
+      - name: Build and install debian packages
+        working-directory: ${{ github.workspace }}/packages
+        env:
+          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
+          BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
+        run: |
+          chmod +x ./build_debian_pkgs.sh
+          SRC_ROOT=${HOME}/src
+          ROOT_BUILD_DIR=${HOME}/build
+          DEB_PKGS_DIR=${RUNNER_TEMP}/outputs/deb_pkgs
+          mkdir -p ${DEB_PKGS_DIR}
+          DEB_BUILD_ROOT=${HOME}/debbuild
+          mkdir -p ${DEB_BUILD_ROOT}
+          export SUDOCMD=sudo
+          ./build_debian_pkgs.sh ${DEB_PKGS_DIR} ${SRC_ROOT} ${DEB_BUILD_ROOT}
+          if [ -z "$(ls -A ${DEB_PKGS_DIR})" ]; then
+            echo "FAILED: package output directory ${DEB_PKGS_DIR} appears to be empty"
+            exit 1
+          else
+            echo "Output in ${DEB_PKGS_DIR}"
+            ls ${DEB_PKGS_DIR}
+          fi
+
+      - name: Build python packages
+        working-directory: ${{ github.workspace }}/packages
+        env:
+          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
+          BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
+        run: |
+          chmod +x ./build_python_pkgs.sh
+          SRC_ROOT=${HOME}/src
+          ROOT_BUILD_DIR=${HOME}/build
+          PY_PKGS_DIR=${RUNNER_TEMP}/outputs/py_pkgs
+          mkdir -p ${PY_PKGS_DIR}
+          ./build_python_pkgs.sh ${PY_PKGS_DIR} ${SRC_ROOT}
+          if [ -z "$(ls -A ${PY_PKGS_DIR})" ]; then
+            echo "FAILED: package output directory ${PY_PKGS_DIR} appears to be empty"
+            exit 1
+          else
+            echo "Output in ${PY_PKGS_DIR}"
+            ls ${PY_PKGS_DIR}
+          fi
+
+      - name: Build R packages
+        working-directory: ${{ github.workspace }}/packages
+        env:
+          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
+          BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
+        run: |
+          chmod +x ./build_r_pkgs.sh
+          SRC_ROOT=${HOME}/src
+          ROOT_BUILD_DIR=${HOME}/build
+          R_PKGS_DIR=${RUNNER_TEMP}/outputs/r_pkgs
+          mkdir -p ${R_PKGS_DIR}
+          ./build_r_pkgs.sh ${R_PKGS_DIR} ${SRC_ROOT}
+          ret_code=$?
+          if [ $ret_code != 0 ]; then
+              echo ERROR: build_r_pkgs.sh failed
+              exit $ret_code;
+          fi
+          if [ -z "$(ls -A ${R_PKGS_DIR})" ]; then
+            echo "FAILED: package output directory ${R_PKGS_DIR} appears to be empty"
+            exit 1
+          else
+            echo "Output in ${R_PKGS_DIR}"
+            ls ${R_PKGS_DIR}
+          fi
+
+      - name: Code provenance information
+        run: |
+          prov_file=${RUNNER_TEMP}/outputs/provenance.md
+          touch ${prov_file}
+          SRC_ROOT=${HOME}/src
+          cd ${SRC_ROOT}/sf-stack
+          echo "# Source code provenance information" >> ${prov_file}
+          echo "" >> ${prov_file}
+          git log -n 1 >> ${prov_file}
+
+      - name: Create version file
+        run: |
+          mkdir -p ${RUNNER_TEMP}/outputs/version
+          echo "${{ env.BUILD_VERSION }}" > ${RUNNER_TEMP}/outputs/version/version.txt
+
+      - name: Check output with built packages
+        run: |
+          OUT_DIR=${RUNNER_TEMP}/outputs
+          if [ -z "$(ls -A ${OUT_DIR})" ]; then
+            echo "FAILED: package output directory ${OUT_DIR} appears to be empty"
+            exit 1
+          fi
+          cd ${OUT_DIR}
+          ls -lR
+
+      - name: Create release archive
+        run: |
+          cd ${RUNNER_TEMP}/outputs
+          tar -czvf swift-packages-${{ env.BUILD_VERSION }}.tar.gz \
+            deb_pkgs/ \
+            py_pkgs/ \
+            r_pkgs/ \
+            provenance.md \
+            version/
+
+      - name: Upload artifact (for workflow runs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: swift-packages-${{ env.BUILD_VERSION }}
+          path: ${{ runner.temp }}/outputs/swift-packages-${{ env.BUILD_VERSION }}.tar.gz
+          retention-days: 30
+
+      - name: Create GitHub Release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.BUILD_VERSION }}
+          name: Release ${{ env.BUILD_VERSION }}
+          body: |
+            Debian, Python, and R packages for SWIFT and related libraries.
+            
+            **Build:** ${{ github.run_number }}
+            **Commit:** ${{ github.sha }}
+            
+            ## Download
+            ```bash
+            gh release download v${{ env.BUILD_VERSION }} --repo ${{ github.repository }}
+            tar -xzvf swift-packages-${{ env.BUILD_VERSION }}.tar.gz
+            ```
+          files: ${{ runner.temp }}/outputs/swift-packages-${{ env.BUILD_VERSION }}.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -31,7 +31,8 @@ umask 022
 . globals
 
 SRC_ROOT=${HOME}/src
-CSIRO_BITBUCKET=${SRC_ROOT}
+GHE_REPOS=${SRC_ROOT}
+# GITHUB_REPOS is kept as an alias for compatibility with any downstream references
 GITHUB_REPOS=${SRC_ROOT}
 
 ROOT_BUILD_DIR=${HOME}/build
@@ -56,26 +57,26 @@ ret_code=0
 #     exit $ret_code; 
 # fi
 
-mkdir -p ${CSIRO_BITBUCKET} \
-  && cd ${CSIRO_BITBUCKET} \
-  && echo cloning https://SOMETHING@bitbucket.csiro.au/scm/sf/sf-stack.git \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/sf-stack.git \
+mkdir -p ${GHE_REPOS} \
+  && cd ${GHE_REPOS} \
+  && echo cloning https://SOMETHING@github.com/csiro-internal/sf-stack.git \
+  && git clone https://${SWIFT_PAT}@github.com/csiro-internal/sf-stack.git \
   && cd sf-stack \
   && git checkout ${BRANCH_NAME} || ret_code=1;
 
 _exit_if_failed $ret_code "Failed to checkout sf-stack"
 
-. ${CSIRO_BITBUCKET}/sf-stack/reponames.sh
-. ${CSIRO_BITBUCKET}/sf-stack/hashsums
+. ${GHE_REPOS}/sf-stack/reponames.sh
+. ${GHE_REPOS}/sf-stack/hashsums
 
 echo Testing whether reposha has the expected SHA for c-c: ${reposha["cruise-control"]}
 
 # turn the detached message off
 git config --global advice.detachedHead false
 
-mkdir -p ${CSIRO_BITBUCKET} \
-  && cd ${CSIRO_BITBUCKET} \
-  && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/cruise-control.git \
+mkdir -p ${GHE_REPOS} \
+  && cd ${GHE_REPOS} \
+  && git clone https://${SWIFT_PAT}@github.com/csiro-internal/cruise-control.git \
   && cd cruise-control \
   && git checkout ${reposha["cruise-control"]} || ret_code=1;
 
@@ -87,8 +88,8 @@ ret_code=0
 
 for f in ${reponames_bb_checkout[@]} ; do
   ret_code=0;
-  cd ${CSIRO_BITBUCKET} \
-    && git clone https://${SWIFT_PAT}@bitbucket.csiro.au/scm/sf/${f}.git \
+  cd ${GHE_REPOS} \
+    && git clone https://${SWIFT_PAT}@github.com/csiro-internal/${f}.git \
     && cd $f \
     && git checkout ${reposha["$f"]} || ret_code=1;
 
@@ -102,7 +103,7 @@ ret_code=0
 for f in ${reponames_gh[@]} ; do
   ret_code=0;
   cd ${GITHUB_REPOS} \
-    && git clone https://github.com/csiro-hydroinformatics/${f}.git \
+    && git clone https://${SWIFT_PAT}@github.com/csiro-internal/${f}.git \
     && cd $f \
     && git checkout ${reposha["$f"]} || ret_code=1;
 
