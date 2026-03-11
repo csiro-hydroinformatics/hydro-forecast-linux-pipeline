@@ -23,6 +23,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          # GitHub App credentials stored as repository secrets.
+          # The App must be installed on each repository that checkouts.sh clones.
+          # This scopes authentication to only those specific repositories,
+          # unlike a classic PAT which grants access to all repositories you can access.
+          app-id: ${{ secrets.CSIRO_INTERNAL_APP_ID }}
+          private-key: ${{ secrets.CSIRO_INTERNAL_APP_PRIVATE_KEY }}
+          owner: csiro-internal
+
       - name: Where are repos checked out
         run: |
           echo "GITHUB_WORKSPACE=${GITHUB_WORKSPACE}"
@@ -38,7 +50,7 @@ jobs:
       - name: Clone and checkout codebases
         working-directory: ${{ github.workspace }}/packages
         env:
-          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
+          SWIFT_PAT_ENV_VAR: ${{ steps.app-token.outputs.token }}
           BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
         run: |
           mkdir -p ${RUNNER_TEMP}/outputs
@@ -48,7 +60,6 @@ jobs:
       - name: Unzip test/doc data
         working-directory: ${{ github.workspace }}/packages
         env:
-          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
           BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
         run: |
           echo /usr/local/share/data:
@@ -59,7 +70,6 @@ jobs:
       - name: Build and install debian packages
         working-directory: ${{ github.workspace }}/packages
         env:
-          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
           BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
         run: |
           chmod +x ./build_debian_pkgs.sh
@@ -82,7 +92,6 @@ jobs:
       - name: Build python packages
         working-directory: ${{ github.workspace }}/packages
         env:
-          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
           BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
         run: |
           chmod +x ./build_python_pkgs.sh
@@ -102,7 +111,6 @@ jobs:
       - name: Build R packages
         working-directory: ${{ github.workspace }}/packages
         env:
-          SWIFT_PAT_ENV_VAR: ${{ secrets.SWIFT_PAT }}
           BRANCH_NAME_ENV_VAR: ${{ github.ref_name }}
         run: |
           chmod +x ./build_r_pkgs.sh
