@@ -4,6 +4,15 @@ SWIFT_PAT=${SWIFT_PAT_ENV_VAR}
 BRANCH_NAME=${BRANCH_NAME_ENV_VAR}
 # BRANCH_NAME="testing"
 
+# bitbucket personal access tokens can have forward slashes. 
+# And tend to. This considerably messes things up. 
+# This is a fallback in case there are "/" in the PAT to replace it with a URL compatible string:
+# echo SWIFT_PAT=${SWIFT_PAT}
+SWIFT_PAT="${SWIFT_PAT//\//%2F}"
+# echo from entrypoint.sh
+# echo SWIFT_PAT=${SWIFT_PAT}
+
+
 # echo TEST_PAT=$TEST_PAT
 # echo TEST_PAT_ENV_VAR=$TEST_PAT_ENV_VAR
 
@@ -20,12 +29,6 @@ umask 022
 # git lfs install
 
 . globals
-
-# Configure git to use the token as credentials for github.com.
-# This avoids embedding the token directly in clone URLs (which would expose it
-# in process listings and logs). The URL rewrite approach is used rather than
-# credential store to avoid stale entries if the script is re-run.
-git config --global url."https://x-access-token:${SWIFT_PAT}@github.com/".insteadOf "https://github.com/"
 
 SRC_ROOT=${HOME}/src
 GHE_REPOS=${SRC_ROOT}
@@ -56,8 +59,8 @@ ret_code=0
 
 mkdir -p ${GHE_REPOS} \
   && cd ${GHE_REPOS} \
-  && echo cloning https://github.com/csiro-internal/sf-stack.git \
-  && git clone https://github.com/csiro-internal/sf-stack.git \
+  && echo cloning https://SOMETHING@github.com/csiro-internal/sf-stack.git \
+  && git clone https://${SWIFT_PAT}@github.com/csiro-internal/sf-stack.git \
   && cd sf-stack \
   && git checkout ${BRANCH_NAME} || ret_code=1;
 
@@ -73,7 +76,7 @@ git config --global advice.detachedHead false
 
 mkdir -p ${GHE_REPOS} \
   && cd ${GHE_REPOS} \
-  && git clone https://github.com/csiro-internal/cruise-control.git \
+  && git clone https://${SWIFT_PAT}@github.com/csiro-internal/cruise-control.git \
   && cd cruise-control \
   && git checkout ${reposha["cruise-control"]} || ret_code=1;
 
@@ -86,7 +89,7 @@ ret_code=0
 for f in ${reponames_bb_checkout[@]} ; do
   ret_code=0;
   cd ${GHE_REPOS} \
-    && git clone https://github.com/csiro-internal/${f}.git \
+    && git clone https://${SWIFT_PAT}@github.com/csiro-internal/${f}.git \
     && cd $f \
     && git checkout ${reposha["$f"]} || ret_code=1;
 
@@ -100,7 +103,7 @@ ret_code=0
 for f in ${reponames_gh[@]} ; do
   ret_code=0;
   cd ${GITHUB_REPOS} \
-    && git clone https://github.com/csiro-internal/${f}.git \
+    && git clone https://${SWIFT_PAT}@github.com/csiro-internal/${f}.git \
     && cd $f \
     && git checkout ${reposha["$f"]} || ret_code=1;
 
