@@ -103,7 +103,7 @@ ret_code=0
 for f in ${reponames_gh[@]} ; do
   ret_code=0;
   cd ${GITHUB_REPOS} \
-    && git clone https://${SWIFT_PAT}@github.com/csiro-internal/${f}.git \
+    && git clone https://github.com/csiro-hydroinformatics/${f}.git \
     && cd $f \
     && git checkout ${reposha["$f"]} || ret_code=1;
 
