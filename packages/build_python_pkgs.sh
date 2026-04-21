@@ -20,6 +20,9 @@ mkdir -p ${PY_PKGS_DIR}
 SUDOCMD=
 SUDOCMD=sudo
 
+# 2026-04: migrated most of the packages to use pyproject.toml and build with uv. 
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 _build_py_pkg () {
     if [ ! -e ${PKG_SRC} ]; then
         echo "FAILED: directory not found: $PKG_SRC";
@@ -29,7 +32,8 @@ _build_py_pkg () {
     # TODO: placeholder where we should have the unit tests running.
     mkdir -p dist
     rm dist/*
-    python3 setup.py sdist bdist_wheel
+    uv build
+    # python3 setup.py sdist bdist_wheel
 
     if [ $? == 0 ]; then
         echo "OK: built python package $PKG_SRC";
@@ -151,6 +155,23 @@ fi
 
 SRC=${SRC_ROOT}/qpp
 PKG_SRC=${SRC}/bindings/python/fogss
+
+_build_py_pkg
+
+if [ ! $? == 0 ]; then
+    exit 1;
+else
+    echo "OK: copying python wheel to ${PY_PKGS_DIR}";
+    cp ${PKG_SRC}/dist/*.whl ${PY_PKGS_DIR}/
+fi
+
+${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
+
+#########################################################
+
+
+SRC=${SRC_ROOT}/swift-py-dev
+PKG_SRC=${SRC}
 
 _build_py_pkg
 
