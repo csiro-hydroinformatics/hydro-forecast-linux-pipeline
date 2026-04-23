@@ -50,6 +50,47 @@ stages:
         git rev-parse HEAD
       displayName: 'Verify current branch and commit'
     - task: Bash@3
+      displayName: 'Set up SSH keys for private repos'
+      inputs:
+        targetType: 'inline'
+        script: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          declare -A key_vars=(
+            [sf-stack]="${SSH_KEY_SF_STACK}"
+            [cruise-control]="${SSH_KEY_CRUISE_CONTROL}"
+            [numerical-sl-cpp]="${SSH_KEY_NUMERICAL_SL_CPP}"
+            [datatypes]="${SSH_KEY_DATATYPES}"
+            [swift]="${SSH_KEY_SWIFT}"
+            [swift-py-dev]="${SSH_KEY_SWIFT_PY_DEV}"
+            [qpp]="${SSH_KEY_QPP}"
+            [chypp]="${SSH_KEY_CHYPP}"
+          )
+          for repo in "${!key_vars[@]}"; do
+            keyfile=~/.ssh/hydro_fc_${repo//-/_}
+            echo "${key_vars[$repo]}" | base64 -d > "$keyfile"
+            chmod 600 "$keyfile"
+            cat >> ~/.ssh/config <<EOF
+          Host github-${repo}
+            HostName github.com
+            IdentityFile ${keyfile}
+            IdentitiesOnly yes
+          EOF
+          done
+          chmod 600 ~/.ssh/config
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+          chmod 644 ~/.ssh/known_hosts
+        failOnStderr: false
+      env:
+        SSH_KEY_SF_STACK: $(SSH_KEY_SF_STACK)
+        SSH_KEY_CRUISE_CONTROL: $(SSH_KEY_CRUISE_CONTROL)
+        SSH_KEY_NUMERICAL_SL_CPP: $(SSH_KEY_NUMERICAL_SL_CPP)
+        SSH_KEY_DATATYPES: $(SSH_KEY_DATATYPES)
+        SSH_KEY_SWIFT: $(SSH_KEY_SWIFT)
+        SSH_KEY_SWIFT_PY_DEV: $(SSH_KEY_SWIFT_PY_DEV)
+        SSH_KEY_QPP: $(SSH_KEY_QPP)
+        SSH_KEY_CHYPP: $(SSH_KEY_CHYPP)
+    - task: Bash@3
       displayName: 'Clone and checkout codebases'
       inputs:
         targetType: 'inline'
@@ -62,7 +103,6 @@ stages:
         # Tried `true``, but this seemed to lead to failing tasks without obvious real failure. 
         # failOnStderr: true
       env:
-        SWIFT_PAT_ENV_VAR: $(SWIFT_PAT) # the recommended way to map to an env variable
         BRANCH_NAME_ENV_VAR: $(Build.SourceBranchName)
     - task: Bash@3
       displayName: 'Unzip test/doc data'
