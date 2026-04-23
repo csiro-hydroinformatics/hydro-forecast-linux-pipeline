@@ -23,6 +23,11 @@ SUDOCMD=sudo
 # 2026-04: migrated most of the packages to use pyproject.toml and build with uv. 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# To add $HOME/.local/bin to your PATH, either restart your shell or run:
+#     source $HOME/.local/bin/env (sh, bash, zsh)
+#     source $HOME/.local/bin/env.fish (fish)
+source $HOME/.local/bin/env 
+
 _build_py_pkg () {
     if [ ! -e ${PKG_SRC} ]; then
         echo "FAILED: directory not found: $PKG_SRC";
