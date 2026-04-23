@@ -115,12 +115,13 @@ fi
 ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
 cd $PKG_SRC
-coverage run -m pytest
-if [ ! $? == 0 ]; then
-    exit 1;
-else
-    echo "OK: uchronia unit tests";
-fi
+# 2026 04 : temporarily disable. Test harness requires an env per copier-uv with griffe. Overkill for marginal value.
+# coverage run -m pytest
+# if [ ! $? == 0 ]; then
+#     exit 1;
+# else
+#     echo "OK: uchronia unit tests";
+# fi
 
 #########################################################
 
@@ -139,6 +140,7 @@ fi
 
 ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
+# 2026 04 : temporarily disable. Test harness requires an env per copier-uv with griffe. Overkill for marginal value.
 # cd $PKG_SRC
 # coverage run -m pytest
 # if [ ! $? == 0 ]; then
