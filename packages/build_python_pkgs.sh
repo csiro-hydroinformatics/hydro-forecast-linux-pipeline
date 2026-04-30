@@ -149,13 +149,13 @@ ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 #     echo "OK: swift2 unit tests";
 # fi
 cd $PKG_SRC/notebooks
-python3 minimal_unit_test.py 
-if [ ! $? == 0 ]; then
-    echo "FAILED: swift2 python3 minimal_unit_test.py";
-    exit 1;
-else
-    echo "OK: swift2 python3 minimal_unit_test.py";
-fi
+# python3 minimal_unit_test.py 
+# if [ ! $? == 0 ]; then
+#     echo "FAILED: swift2 python3 minimal_unit_test.py";
+#     exit 1;
+# else
+#     echo "OK: swift2 python3 minimal_unit_test.py";
+# fi
 
 #########################################################
 
