@@ -32,8 +32,19 @@ done
 
 to list in order to add the private key in the azdo pipeline as secrets:
 
-```sh
+<!-- ```sh
 for f in ~/.ssh/hydro_fc_*.b64; do echo "=== $f ==="; cat "$f"; echo; done
+``` -->
+
+```sh
+for f in ~/.ssh/hydro_fc_*.b64; do
+  repo=$(basename "$f" .b64)
+  repo=${repo#hydro_fc_}
+  keyname="SSH_KEY_$(echo "$repo" | tr '[:lower:]-' '[:upper:]_')"
+  echo "=== Variable name: ${keyname} ==="
+  cat "$f"
+  echo
+done
 ```
 
 key names:
