@@ -17,7 +17,7 @@ jobs:
     name: Build packages
     runs-on: ubuntu-latest
     container:
-      image: disparue/ubuntu-jammy-202501:20250303
+      image: disparue/sf-ubuntu-jammy:20260821
 
     steps:
       - name: Checkout

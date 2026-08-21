@@ -30,14 +30,19 @@ docker images | grep jammy
 # March 25, scipy-notebook is now based on noble
 # https://github.com/jupyter/docker-stacks/blob/main/images/docker-stacks-foundation/Dockerfile
 # so this is what we should built our tools for, as is most likely to run on this.
-TARGET=ubuntu-noble-202501
-# TARGET=ubuntu-jammy-202501
+
+# I used to add the ubuntu version nb in the image, but this is perhaps not useful. 
+# Just use the tag instead
+# 22.04, jammy-20260810, jammy
+TARGET=sf-ubuntu-jammy  #-20260810
+# TARGET=ubuntu-noble 
+
 IMAGE_NAME=${TARGET}
 DOCKER_REPOSITORY=hydrofc
 TAG=`date +%Y%m%d`
 EXTRA_ARGS=""
-# DOCKER_FN=Dockerfile-jammy-base
-DOCKER_FN=Dockerfile-noble-base
+DOCKER_FN=Dockerfile-jammy-base
+# DOCKER_FN=Dockerfile-noble-base
 
 # to clean up:
 # docker rmi --force ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG}
@@ -87,18 +92,27 @@ docker push sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 # IMAGE_NAME=ubuntu-jammy-202310
 # EXTRA_ARGS=""
 
-TAG="20250303"
-TARGET=ubuntu-jammy-202501
-DOCKER_REPOSITORY=hydrofc
-IMAGE_NAME=ubuntu-jammy-202501
-EXTRA_ARGS=""
+# DOCKER_REPOSITORY=hydrofc
+# EXTRA_ARGS=""
+
+# TAG="20250303"
+# TARGET=ubuntu-jammy-202501
+# IMAGE_NAME=ubuntu-jammy-202501
+
+# I used to add the ubuntu version nb in the image, but this is perhaps not useful. 
+# Just use the tag instead
+# 22.04, jammy-20260810, jammy
+# TAG="20260821"
+# TARGET=sf-ubuntu-jammy  #-20260810
+# IMAGE_NAME=sf-ubuntu-jammy  #-20260810
+
+# Note: use the variables definitions in the previous section. We are just pushing here.
 
 docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} disparue/${IMAGE_NAME}:${TAG}
 
 docker login -u disparue 
-# Check vault; entry for  gmail address for some reasons
+# Check your password vault; look for an entry for gmail address for some reasons
 docker push disparue/${IMAGE_NAME}:${TAG}
-
 ```
 
 ## Troubleshooting
