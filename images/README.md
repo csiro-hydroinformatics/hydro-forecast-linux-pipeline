@@ -34,33 +34,38 @@ docker images | grep jammy
 # I used to add the ubuntu version nb in the image, but this is perhaps not useful. 
 # Just use the tag instead
 # 22.04, jammy-20260810, jammy
-TARGET=sf-ubuntu-jammy  #-20260810
-# TARGET=ubuntu-noble 
+
+UBUNTU_VERSION=noble
+TARGET=sf-ubuntu-${UBUNTU_VERSION}
 
 IMAGE_NAME=${TARGET}
 DOCKER_REPOSITORY=hydrofc
 TAG=`date +%Y%m%d`
 EXTRA_ARGS=""
-DOCKER_FN=Dockerfile-jammy-base
-# DOCKER_FN=Dockerfile-noble-base
+DOCKER_FN=Dockerfile-${UBUNTU_VERSION}-base
+
+FULL_TAG=${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG}
+
+echo "Image name: ${FULL_TAG}"
 
 # to clean up:
-# docker rmi --force ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG}
+# docker rmi --force ${FULL_TAG}
 
 # can use --no-cache:
 # EXTRA_ARGS="--no-cache"
+
 
 cd ${HOME}/src/hydro-fc-packaging/images
 docker build  \
   -f ${DOCKER_FN} \
   --target ${TARGET}  \
   --squash \
-  --tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} ${EXTRA_ARGS}  \
+  --tag ${FULL_TAG} ${EXTRA_ARGS}  \
   --progress=plain . 2>&1 | tee build-${IMAGE_NAME}.log
 ```
 
 ```sh
-docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} docker-registry.it.csiro.au/hydrofc/${IMAGE_NAME}:${TAG}
+docker tag ${FULL_TAG} docker-registry.it.csiro.au/hydrofc/${IMAGE_NAME}:${TAG}
 ```
 
 
@@ -108,7 +113,7 @@ docker push sfforecastingctnrregistry.azurecr.io/${IMAGE_NAME}:${TAG}
 
 # Note: use the variables definitions in the previous section. We are just pushing here.
 
-docker tag ${DOCKER_REPOSITORY}/${IMAGE_NAME}:${TAG} disparue/${IMAGE_NAME}:${TAG}
+docker tag ${FULL_TAG} disparue/${IMAGE_NAME}:${TAG}
 
 docker login -u disparue 
 # Check your password vault; look for an entry for gmail address for some reasons

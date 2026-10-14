@@ -34,7 +34,7 @@ stages:
     #  endpoint: SfFcastDockerSrvConnection
     # So, just use dockerhub for now.
     # container: disparue/ubuntu-jammy-202310:20240517
-    container: disparue/sf-ubuntu-jammy:20260821
+    container: disparue/sf-ubuntu-noble:20261012
     steps:
     - checkout: self
     - task: Bash@3

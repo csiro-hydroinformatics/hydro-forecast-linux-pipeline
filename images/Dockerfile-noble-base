@@ -3,7 +3,7 @@
 
 # March 25 I notice that the base of scipy-notebook has moved to be based on noble ubuntu 24.04
 # docker pull ubuntu:noble-20250127
-FROM ubuntu:noble-20250127 as ubuntu-noble-202501
+FROM ubuntu:noble-20260917 as sf-ubuntu-noble
 
 LABEL au.csiro.image.authors="jean-michel.perraud@csiro.au"
 LABEL maintainer="J-M <jean-michel.perraud@csiro.au>"
@@ -101,9 +101,9 @@ RUN apt-get update --yes && \
 
 # Ubuntu packaging seems to require some of these explicitely: 
 RUN apt-get install -y \
-  libtbb2 \
+  libtbb-dev \
   libnetcdf19 \
-  libyaml-cpp0.7 \
+  libyaml-cpp0.8 \
   libyaml-0-2 
 
 
