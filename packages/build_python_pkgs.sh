@@ -21,12 +21,28 @@ SUDOCMD=
 SUDOCMD=sudo
 
 # 2026-04: migrated most of the packages to use pyproject.toml and build with uv. 
+# Note: could be made in the base image we build on
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # To add $HOME/.local/bin to your PATH, either restart your shell or run:
 #     source $HOME/.local/bin/env (sh, bash, zsh)
 #     source $HOME/.local/bin/env.fish (fish)
-source $HOME/.local/bin/env 
+source $HOME/.local/bin/env
+
+VENV_PATH=$HOME/.local/venv/swiftbuild
+uv venv $VENV_PATH
+# check the activate location exists, or exit with error
+if [ ! -e $VENV_PATH/bin/activate ]; then
+    echo "FAILED: virtual environment not found at $VENV_PATH/bin/activate";
+    exit 1;
+fi
+source $VENV_PATH/bin/activate
+
+echo "uv is at location $(which uv)"
+# 2026-10 oddly there is a change of behavior, perhaps with the move to Ubuntu 24-04,
+# need to make sure this is is not the system
+# level python still active. 
+echo "python is at location $(which python)"
 
 _build_py_pkg () {
     if [ ! -e ${PKG_SRC} ]; then
@@ -178,6 +194,12 @@ ${SUDOCMD} pip install ${pip_option} ${PKG_SRC}/dist/*.whl
 
 
 SRC=${SRC_ROOT}/swift-py-dev
+
+# 2026-10 we have a template toml otherwise many conflicts amongst users
+# THis may be superseded by a more elegant handling of user and machine specific configuration in the future.
+cd $SRC
+cp pyproject.toml.template pyproject.toml
+
 PKG_SRC=${SRC}
 
 _build_py_pkg
